@@ -107,6 +107,40 @@ public:
         }
     }
     
+    // 简单选择排序
+    void simpleSort(int a[], int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            int index = i;
+            for (int j = i + 1; j < n; j++)
+            {
+                if (a[i] > a[j])
+                {
+                    index = j;
+                }
+            }
+            
+            if (index != i)
+            {
+                int t = a[i];
+                a[i] = a[index];
+                a[index] = t;
+            }
+            
+            print(a, n, i);
+        }
+    }
+    
+    
+    // 堆选择排序
+    void heapSort(int a[], int n)
+    {
+        
+    }
+    
+    
+    
 };
 
 int main(int argc, const char * argv[]) {
@@ -142,6 +176,13 @@ int main(int argc, const char * argv[]) {
     int shellArray[kArraySize];
     memcpy(shellArray, array, 100);
     ss.shellSort(shellArray, kArraySize);
+    
+    
+    cout << "======= 简单排序======" << endl;
+    ss.print(array, kArraySize);
+    int simpleArray[kArraySize];
+    memcpy(simpleArray, array, 100);
+    ss.simpleSort(simpleArray, kArraySize);
     
     
     free(array);
