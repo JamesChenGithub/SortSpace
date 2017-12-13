@@ -24,6 +24,17 @@ public:
         cout << endl;
     }
     
+    bool check(int a[], int n)
+    {
+        int i = 0;
+        while (i < (n-1) && a[i++] <= a[i]);
+        
+        
+        bool isSorted = i == (n - 1);
+        
+        return isSorted;
+    }
+    
 public:
     // 冒泡排序
     void bubbleSort(int a[], int n)
@@ -50,7 +61,10 @@ public:
             
             
             print(a, n, i);
+            
         }
+        bool succ = check(a, n);
+        cout << "排序" << (succ ? "成功" : "失败") << endl;
     }
     
     // 插入排序
@@ -70,6 +84,8 @@ public:
             
             print(a, n, i);
         }
+        bool succ = check(a, n);
+        cout << "排序" << (succ ? "成功" : "失败") << endl;
     }
     
     
@@ -105,6 +121,9 @@ public:
                 break;
             }
         }
+        
+        bool succ = check(a, n);
+        cout << "排序" << (succ ? "成功" : "失败") << endl;
     }
     
     // 简单选择排序
@@ -113,12 +132,15 @@ public:
         for (int i = 0; i < n; i++)
         {
             int index = i;
+            int temp = a[index];
             for (int j = i + 1; j < n; j++)
             {
-                if (a[i] > a[j])
+                if (temp > a[j])
                 {
+                    temp = a[j];
                     index = j;
                 }
+                
             }
             
             if (index != i)
@@ -130,14 +152,78 @@ public:
             
             print(a, n, i);
         }
+        
+        bool succ = check(a, n);
+        cout << "排序" << (succ ? "成功" : "失败") << endl;
     }
     
     
     // 堆选择排序
-    void heapSort(int a[], int n)
+    
+    int quickPartitionPivot(int a[], int n, int low, int heigh)
     {
+        if (low < heigh)
+        {
+            
+            int pos = low;
+            int left = pos + 1;
+            int right = heigh;
+            int pivotValue = a[pos];
+            
+            while (true)
+            {
+                while (a[left] <= pivotValue)
+                {
+//                    a[left - 1] = a[left];
+                    left++;
+                }
+                a[left - 1] = pivotValue;
+                
+                while (a[right] >= pivotValue) {
+                    right--;
+                }
+                
+                
+                if (left >= right)
+                {
+                    break;
+                }
+                
+//                int temp = a[left];
+//                a[left] = a[right];
+//                a[right] = temp;
+                
+            }
+            
+            return right;
+        }
+        
+        
+        print(a, n);
+        
+        return -1;
         
     }
+    
+    void quickSort(int a[], int n, int low, int heigh)
+    {
+        if (low < heigh)
+        {
+            int pivot = quickPartitionPivot(a, n, low, heigh);
+            
+            if (pivot >= low && pivot <= heigh)
+            {
+                quickSort(a, n, low, pivot - 1);
+                quickSort(a, n, pivot + 1, heigh);
+               
+            }
+        }
+        
+        print(a, n);
+    }
+    
+    
+    
     
     
     
@@ -146,7 +232,7 @@ public:
 int main(int argc, const char * argv[]) {
    
     
-    const int kArraySize = abs(rand()%100) + 10;
+    const int kArraySize = abs(random()%20) ;
     int *array = new int[kArraySize];
     memset(array, 0, kArraySize);
 
@@ -157,36 +243,49 @@ int main(int argc, const char * argv[]) {
 
     SortSample ss;
     ss.print(array, kArraySize);
-    
+
     cout << "=======冒泡排序======" << endl;
-    
+
     int bubbleArray[kArraySize];
-    memcpy(bubbleArray, array, 100);
+    memcpy(bubbleArray, array, sizeof(bubbleArray));
+    ss.print(bubbleArray, kArraySize);
     ss.bubbleSort(bubbleArray, kArraySize);
-    
-    
+
+
     cout << "=======插入排序======" << endl;
     ss.print(array, kArraySize);
     int insertArray[kArraySize];
-    memcpy(insertArray, array, 100);
+    memcpy(insertArray, array, sizeof(insertArray));
     ss.insertSort(insertArray, kArraySize);
-    
+
     cout << "=======Shell排序======" << endl;
     ss.print(array, kArraySize);
     int shellArray[kArraySize];
-    memcpy(shellArray, array, 100);
+    memcpy(shellArray, array, sizeof(shellArray));
     ss.shellSort(shellArray, kArraySize);
     
     
     cout << "======= 简单排序======" << endl;
     ss.print(array, kArraySize);
     int simpleArray[kArraySize];
-    memcpy(simpleArray, array, 100);
+    memcpy(simpleArray, array, sizeof(simpleArray));
     ss.simpleSort(simpleArray, kArraySize);
     
     
-    free(array);
-    array = nullptr;
+    cout << "======= 快排序======" << endl;
+    const int kQASize = kArraySize;
+    int quickArray[kQASize];
+    ss.print(array, kQASize);
+    memcpy(quickArray, array, sizeof(quickArray));
+    ss.quickSort(quickArray, kArraySize, 0, kArraySize - 1);
+    bool succ = ss.check(quickArray, kArraySize);
+    cout << "排序" << (succ ? "成功" : "失败") << endl;
+    
+    int arr[3] = {817, 259, 83};
+    ss.quickSort(arr, 3, 0, 3 - 1);
+    
+//    free(array);
+//    array = nullptr;
     
     
     return 0;
