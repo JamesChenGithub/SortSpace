@@ -15,6 +15,13 @@ class SortSample
 {
 
 public:
+    
+    void swap(int &a, int &b)
+    {
+        b = a + b;
+        a = b - a;
+        b = b - a;
+    }
     void print(int a[], int n, int num = 0)
     {
         cout << "第" << num << "排序结果：";
@@ -66,6 +73,57 @@ public:
         bool succ = check(a, n);
         cout << "排序" << (succ ? "成功" : "失败") << endl;
     }
+    
+    void bubbleSortV2(int a[], int n)
+    {
+        bool flag = true;
+        int k = n;
+        while (flag)
+        {
+            flag = false;
+            
+            for (int i = 1; i < k; i++)
+            {
+                if (a[i-1] > a[i])
+                {
+                    swap(a[i-1], a[i]);
+                    flag = true;
+                }
+            }
+            k--;
+            print(a, n, n-k);
+        }
+        
+        bool succ = check(a, n);
+        cout << "排序" << (succ ? "成功" : "失败") << endl;
+        
+    }
+    
+    void bubbleSortV3(int a[], int n)
+    {
+        int flag = n;
+        int k = n;
+        while (flag > 0)
+        {
+            flag = 0;
+            
+            for (int i = 1; i < k; i++)
+            {
+                if (a[i-1] > a[i])
+                {
+                    swap(a[i-1], a[i]);
+                    flag = i;
+                }
+            }
+            k--;
+            print(a, n, n-k);
+        }
+        
+        bool succ = check(a, n);
+        cout << "排序" << (succ ? "成功" : "失败") << endl;
+        
+    }
+    
     
     // 插入排序
     void insertSort(int a[], int n)
@@ -145,9 +203,7 @@ public:
             
             if (index != i)
             {
-                int t = a[i];
-                a[i] = a[index];
-                a[index] = t;
+                swap(a[i], a[index]);
             }
             
             print(a, n, i);
@@ -158,7 +214,7 @@ public:
     }
     
     
-    // 堆选择排序
+    // 快排序
     
     int quickPartitionPivot(int a[], int n, int low, int heigh)
     {
@@ -229,7 +285,11 @@ public:
     
     
     
+    // 堆排
     
+    // 合并排序
+    
+    // 基排序
     
     
 };
@@ -237,7 +297,7 @@ public:
 int main(int argc, const char * argv[]) {
    
     
-    const int kArraySize = abs(random()%50) ;
+    const int kArraySize = abs(rand()%50) ;
     int *array = new int[kArraySize];
     memset(array, 0, kArraySize);
 
@@ -256,6 +316,25 @@ int main(int argc, const char * argv[]) {
     ss.print(bubbleArray, kArraySize);
     ss.bubbleSort(bubbleArray, kArraySize);
 
+    cout << "=======冒泡2排序======" << endl;
+    memcpy(bubbleArray, array, sizeof(bubbleArray));
+    ss.bubbleSortV2(bubbleArray, kArraySize);
+    
+    cout << "=======冒泡3排序======" << endl;
+    memcpy(bubbleArray, array, sizeof(bubbleArray));
+    ss.bubbleSortV3(bubbleArray, kArraySize);
+    
+    
+    int bt[10] = {2,1,3,4,5,6,7,8,9,10};
+    cout << "=======冒泡2排序======" << endl;
+    ss.bubbleSortV2(bt, 10);
+    cout << "=======冒泡3排序======" << endl;
+    ss.bubbleSortV3(bt, 10);
+    int bt2[10] = {1,2,3,4,5,6,7,8,9,10};
+    cout << "=======冒泡2排序======" << endl;
+    ss.bubbleSortV2(bt, 10);
+    cout << "=======冒泡3排序======" << endl;
+    ss.bubbleSortV2(bt, 10);
 
     cout << "=======插入排序======" << endl;
     ss.print(array, kArraySize);
