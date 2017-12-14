@@ -162,40 +162,45 @@ public:
     
     int quickPartitionPivot(int a[], int n, int low, int heigh)
     {
+        
+        cout << "==========" << endl;
         if (low < heigh)
         {
             
             int pos = low;
-            int left = pos + 1;
+            int left = low;
             int right = heigh;
             int pivotValue = a[pos];
             
-            while (true)
+            while (left < right)
             {
-                while (a[left] <= pivotValue)
+                while (left < right && a[right] >= pivotValue)
                 {
-//                    a[left - 1] = a[left];
-                    left++;
-                }
-                a[left - 1] = pivotValue;
-                
-                while (a[right] >= pivotValue) {
                     right--;
                 }
                 
-                
-                if (left >= right)
+                if (left < right)
                 {
-                    break;
+                    a[left++] = a[right];
                 }
                 
-//                int temp = a[left];
-//                a[left] = a[right];
-//                a[right] = temp;
+                print(a, n);
                 
+                while (left < right && a[left] <= pivotValue)
+                {
+                    left++;
+                }
+                
+                if (left < right)
+                {
+                    a[right--] = a[left];
+                }
+                print(a, n);
             }
             
-            return right;
+            a[left] = pivotValue;
+            print(a, n);
+            return left;
         }
         
         
@@ -213,7 +218,7 @@ public:
             
             if (pivot >= low && pivot <= heigh)
             {
-                quickSort(a, n, low, pivot - 1);
+                quickSort(a, n, low, pivot-1);
                 quickSort(a, n, pivot + 1, heigh);
                
             }
@@ -232,7 +237,7 @@ public:
 int main(int argc, const char * argv[]) {
    
     
-    const int kArraySize = abs(random()%20) ;
+    const int kArraySize = abs(random()%50) ;
     int *array = new int[kArraySize];
     memset(array, 0, kArraySize);
 
@@ -281,8 +286,8 @@ int main(int argc, const char * argv[]) {
     bool succ = ss.check(quickArray, kArraySize);
     cout << "排序" << (succ ? "成功" : "失败") << endl;
     
-    int arr[3] = {817, 259, 83};
-    ss.quickSort(arr, 3, 0, 3 - 1);
+    int arr[6] = {3, 1, 4, 2, 6,5};
+    ss.quickSort(arr, 6, 0, 5);
     
 //    free(array);
 //    array = nullptr;
