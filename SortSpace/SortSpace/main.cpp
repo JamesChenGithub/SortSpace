@@ -130,18 +130,35 @@ public:
     {
         for (int i = 1; i < n; i++)
         {
-            int temp = a[i];
-            int k = i;
-            for (int j = i ; j > 0 && a[j - 1] > temp; j--)
+            if (a[i - 1] > a[i])
             {
-                a[j] = a[j-1];
-                k = j-1;
+                int temp = a[i];
+                int k = i;
+                for (int j = i ; j > 0 && a[j - 1] > temp; j--)
+                {
+                    a[j] = a[j-1];
+                    k = j-1;
+                }
+                
+                a[k] = temp;
             }
             
-            a[k] = temp;
             
             print(a, n, i);
         }
+        bool succ = check(a, n);
+        cout << "排序" << (succ ? "成功" : "失败") << endl;
+    }
+    
+    void insertSortV2(int a[], int n)
+    {
+        for (int i = 1; i < n; i++) {
+            for(int j = i - 1; j >= 0 && a[j] > a[j+1]; j--){
+                swap(a[j], a[j+1]);
+            }
+            print(a, n, i);
+        }
+        
         bool succ = check(a, n);
         cout << "排序" << (succ ? "成功" : "失败") << endl;
     }
@@ -183,6 +200,23 @@ public:
         bool succ = check(a, n);
         cout << "排序" << (succ ? "成功" : "失败") << endl;
     }
+    
+    void shellSortV2(int a[], int n)
+    {
+        for (int gap = n/2; gap > 0; gap /= 2)
+        {
+            for (int i = gap; i < n; i++) {
+                for(int j = i - gap; j >= 0 && a[j] > a[j+gap]; j-= gap){
+                    swap(a[j], a[j+gap]);
+                }
+            }
+            print(a, n, gap);
+        }
+        
+        bool succ = check(a, n);
+        cout << "排序" << (succ ? "成功" : "失败") << endl;
+    }
+    
     
     // 简单选择排序
     void simpleSort(int a[], int n)
@@ -289,6 +323,30 @@ public:
     
     // 合并排序
     
+    // 一个大小为n的数组，里面的数的范围在[0, n - 1], 有不确定的重复远元素，找到到至少一个重复元素；
+    void checkHasRepeat(int array[], int n)
+    {
+        int a[n];
+        memcpy(a, array, sizeof(a));
+        
+        
+        for (int i = 0; i < n; i++)
+        {
+            
+            while (i != a[i])
+            {
+                if (a[i] == a[a[i]])
+                {
+                    cout << "找到重复元素:" << a[i] << endl;
+                    break;
+                }
+                swap(a[i], a[a[i]]);
+                
+                print(a, n, i);
+            }
+        }
+    }
+    
     // 基排序
     
     
@@ -341,12 +399,20 @@ int main(int argc, const char * argv[]) {
     int insertArray[kArraySize];
     memcpy(insertArray, array, sizeof(insertArray));
     ss.insertSort(insertArray, kArraySize);
+    cout << "=======插入排序V2======" << endl;
+    memcpy(insertArray, array, sizeof(insertArray));
+    ss.insertSortV2(insertArray, kArraySize);
+    
 
     cout << "=======Shell排序======" << endl;
     ss.print(array, kArraySize);
     int shellArray[kArraySize];
     memcpy(shellArray, array, sizeof(shellArray));
     ss.shellSort(shellArray, kArraySize);
+    
+    cout << "=======Shell V2排序======" << endl;
+    memcpy(shellArray, array, sizeof(shellArray));
+    ss.shellSortV2(shellArray, kArraySize);
     
     
     cout << "======= 简单排序======" << endl;
@@ -368,9 +434,28 @@ int main(int argc, const char * argv[]) {
     int arr[6] = {3, 1, 4, 2, 6,5};
     ss.quickSort(arr, 6, 0, 5);
     
-//    free(array);
-//    array = nullptr;
+    free(array);
+    array = nullptr;
     
+    
+    const int kSize = abs(rand()%50) ;
+    int *tesArray = new int[kSize];
+    memset(tesArray, 0, kArraySize);
+    
+    for (int k = 0; k < kSize; k++)
+    {
+        tesArray[k] = abs(rand()%kSize);
+    }
+    
+    ss.print(tesArray, kSize);
+    ss.checkHasRepeat(tesArray, kSize);
+    
+    int temp[3] = {0,1,2};
+    ss.checkHasRepeat(temp, 3);
+    
+    
+    free(tesArray);
+    tesArray = nullptr;
     
     return 0;
 }
