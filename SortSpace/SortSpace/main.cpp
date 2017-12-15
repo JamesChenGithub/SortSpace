@@ -322,6 +322,86 @@ public:
     // 堆排
     
     // 合并排序
+    void mergeArray(int a[], int left, int mid, int right)
+    {
+        
+        int *temp = new int[(right - left + 1)];
+        
+        if (a[mid] <= a[mid + 1])
+        {
+            return;
+        }
+        else
+        {
+            print(a+left, right - left+1);
+            int i = left;
+            int j = mid + 1;
+            int k = 0;
+            while (i <= mid && j <= right)
+            {
+                if (a[i] <= a[j])
+                {
+                    temp[k++] = a[i++];
+                }
+                else
+                {
+                    temp[k++] = a[j++];
+                }
+            }
+            
+            while (i <= mid)
+            {
+                temp[k++] = a[i++];
+            }
+            
+            while (j <= right)
+            {
+                temp[k++] = a[j++];
+            }
+            
+            
+            memcpy(a+left, temp, sizeof(int) * (right - left + 1));
+        }
+//        print(temp, right - left + 1);
+        free(temp);
+        temp = nullptr;
+    }
+    
+    void mergeSort(int a[], int left, int right)
+    {
+        if (left < right)
+        {
+            cout << " left = " << left <<  ", right = " << right << endl;
+            int mid = (left + right)/2;
+            
+            if (mid != left)
+            {
+                mergeSort(a, left, mid);
+//                print(a + left, right - left+1);
+            }
+            
+            
+            if (mid + 1 != right)
+            {
+                mergeSort(a, mid+1, right);
+                
+//                print(a + left, right - left+1);
+            }
+            
+            mergeArray(a, left, mid, right);
+            
+            print(a + left, right - left+1);
+        }
+    }
+    
+    void mergeSort(int a[], int n)
+    {
+        mergeSort(a, 0, n-1);
+    }
+    
+    
+    // 基排序
+    
     
     // 一个大小为n的数组，里面的数的范围在[0, n - 1], 有不确定的重复远元素，找到到至少一个重复元素；
     void checkHasRepeat(int array[], int n)
@@ -346,8 +426,6 @@ public:
             }
         }
     }
-    
-    // 基排序
     
     
 };
@@ -431,29 +509,44 @@ int main(int argc, const char * argv[]) {
     bool succ = ss.check(quickArray, kArraySize);
     cout << "排序" << (succ ? "成功" : "失败") << endl;
     
-    int arr[6] = {3, 1, 4, 2, 6,5};
-    ss.quickSort(arr, 6, 0, 5);
+    
+    cout << "======= 归并排序======" << endl;
+    ss.print(array, kArraySize);
+    int mergeArray[kArraySize];
+    memcpy(mergeArray, array, sizeof(mergeArray));
+    ss.mergeSort(mergeArray, kArraySize);
+    ss.print(mergeArray, kArraySize);
+    
+    
+    
     
     free(array);
     array = nullptr;
     
     
+    
+    int arr[6] = {3, 1, 4, 2, 6,5};
+    ss.quickSort(arr, 6, 0, 5);
+    
+    int arr2[6] = {3, 1, 4, 2, 6,5};
+    ss.mergeSort(arr2, 6);
+
     const int kSize = abs(rand()%50) ;
     int *tesArray = new int[kSize];
     memset(tesArray, 0, kArraySize);
-    
+
     for (int k = 0; k < kSize; k++)
     {
         tesArray[k] = abs(rand()%kSize);
     }
-    
+
     ss.print(tesArray, kSize);
     ss.checkHasRepeat(tesArray, kSize);
-    
+
     int temp[3] = {0,1,2};
     ss.checkHasRepeat(temp, 3);
-    
-    
+
+
     free(tesArray);
     tesArray = nullptr;
     
