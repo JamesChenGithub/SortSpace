@@ -10,28 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SortSpace/main.cpp"
-            timestampString = "535012021.341907"
+            timestampString = "535345522.035236"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "299"
             endingLineNumber = "299"
             landmarkName = "quickPartitionPivot(int a[], int n, int low, int heigh)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SortSpace/main.cpp"
-            timestampString = "535012021.34219"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "328"
-            endingLineNumber = "328"
-            landmarkName = "mergeArray(int a[], int left, int mid, int right)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

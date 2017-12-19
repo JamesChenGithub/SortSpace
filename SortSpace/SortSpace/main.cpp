@@ -427,7 +427,108 @@ public:
         }
     }
     
+    void buildHeap(int array[], int heapSize)
+    {
+        int parent = (heapSize-1)/2;
+        for (int i = parent; i >= 0; i--)
+        {
+            maxHeapAdjust(array, heapSize, i);
+        }
+    }
     
+    void buildHeapV2(int array[], int heapSize)
+    {
+        int parent = (heapSize-1)/2;
+        for (int i = parent; i >= 0; i--)
+        {
+            maxHeapAdjustV2(array, heapSize, i);
+        }
+    }
+    
+    void maxHeapAdjust(int array[], int heapSize, int index)
+    {
+        
+        int imax = index;
+        int iLeft = 2*index + 1;
+        int iRight = 2*index + 2;
+        
+        if (iLeft < heapSize && array[iLeft] > array[index])
+        {
+            imax = iLeft;
+        }
+        
+        if (iRight < heapSize && array[iRight] > array[imax]) {
+            
+            imax = iRight;
+        }
+        
+        if (imax != index)
+        {
+            swap(array[index], array[imax]);
+            
+            maxHeapAdjust(array, heapSize, imax);
+        }
+    }
+    
+    void maxHeapAdjustV2(int array[], int heapSize, int index)
+    {
+        int imax, iLeft, iRight;
+        while (true)
+        {
+             imax = index;
+             iLeft = 2*index + 1;
+             iRight = 2*index + 2;
+            
+            if (iLeft < heapSize && array[iLeft] > array[index])
+            {
+                imax = iLeft;
+            }
+            
+            if (iRight < heapSize && array[iRight] > array[imax]) {
+                imax = iRight;
+            }
+            
+            if (imax != index)
+            {
+                swap(array[index], array[imax]);
+                index = imax;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    
+    
+    
+    void heapSort(int array[], int n)
+    {
+        buildHeap(array, n);
+        
+        for (int i = n - 1; i > 0; i--)
+        {
+            swap(array[0], array[i]);
+            maxHeapAdjust(array, i, 0);
+        }
+        
+        bool succ = check(array, n);
+        cout << "排序" << (succ ? "成功" : "失败") << endl;
+    }
+    
+    void heapSortV2(int array[], int n)
+    {
+        buildHeapV2(array, n);
+        
+        for (int i = n - 1; i > 0; i--)
+        {
+            swap(array[0], array[i]);
+            maxHeapAdjustV2(array, i, 0);
+        }
+        
+        bool succ = check(array, n);
+        cout << "排序" << (succ ? "成功" : "失败") << endl;
+    }
 };
 
 int main(int argc, const char * argv[]) {
@@ -517,6 +618,20 @@ int main(int argc, const char * argv[]) {
     ss.mergeSort(mergeArray, kArraySize);
     ss.print(mergeArray, kArraySize);
     
+    cout << "======= 堆排序======" << endl;
+    ss.print(array, kArraySize);
+    int heapArray[kArraySize];
+    memcpy(heapArray, array, sizeof(heapArray));
+    ss.heapSort(heapArray, kArraySize);
+    ss.print(heapArray, kArraySize);
+    
+    cout << "======= 堆排序V2======" << endl;
+    ss.print(array, kArraySize);
+    int heapArrayv2[kArraySize];
+    memcpy(heapArrayv2, array, sizeof(heapArrayv2));
+    ss.heapSortV2(heapArrayv2, kArraySize);
+    ss.print(heapArrayv2, kArraySize);
+    
     
     
     
@@ -525,30 +640,30 @@ int main(int argc, const char * argv[]) {
     
     
     
-    int arr[6] = {3, 1, 4, 2, 6,5};
-    ss.quickSort(arr, 6, 0, 5);
-    
-    int arr2[6] = {3, 1, 4, 2, 6,5};
-    ss.mergeSort(arr2, 6);
-
-    const int kSize = abs(rand()%50) ;
-    int *tesArray = new int[kSize];
-    memset(tesArray, 0, kArraySize);
-
-    for (int k = 0; k < kSize; k++)
-    {
-        tesArray[k] = abs(rand()%kSize);
-    }
-
-    ss.print(tesArray, kSize);
-    ss.checkHasRepeat(tesArray, kSize);
-
-    int temp[3] = {0,1,2};
-    ss.checkHasRepeat(temp, 3);
-
-
-    free(tesArray);
-    tesArray = nullptr;
+//    int arr[6] = {3, 1, 4, 2, 6,5};
+//    ss.quickSort(arr, 6, 0, 5);
+//
+//    int arr2[6] = {3, 1, 4, 2, 6,5};
+//    ss.mergeSort(arr2, 6);
+//
+//    const int kSize = abs(rand()%50) ;
+//    int *tesArray = new int[kSize];
+//    memset(tesArray, 0, kArraySize);
+//
+//    for (int k = 0; k < kSize; k++)
+//    {
+//        tesArray[k] = abs(rand()%kSize);
+//    }
+//
+//    ss.print(tesArray, kSize);
+//    ss.checkHasRepeat(tesArray, kSize);
+//
+//    int temp[3] = {0,1,2};
+//    ss.checkHasRepeat(temp, 3);
+//
+//
+//    free(tesArray);
+//    tesArray = nullptr;
     
     return 0;
 }
