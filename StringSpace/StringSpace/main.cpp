@@ -29,6 +29,7 @@ public:
         
         const char *matchCPtr = matchStr.c_str();
         const char *patternCPtr = patternStr.c_str();
+        int count = 0;
         
         for (int i = 0; i < matchLen; i++)
         {
@@ -38,7 +39,7 @@ public:
             {
                 char p = patternCPtr[j];
                 char m = matchCPtr[k];
-                cout << " patternCPtr[" << j << "] (" << p <<") != matchCPtr[" << k << "] ("<< m <<")" << endl;
+                cout << "第"<< ++count << "次比较： patternCPtr[" << j << "] (" << p <<") != matchCPtr[" << k << "] ("<< m <<")" << endl;
                 if (p != m)
                 {
                     break;
@@ -161,25 +162,17 @@ public:
         int *next = new int[patternLen];
         getNext(patternStr, next, patternLen);
         
-        cout << patternCPtr << "Next数组为:";
-        for (int i = 0; i < patternLen; i++)
-        {
-            cout << "  " << next[i];
-        }
-        
-        cout << endl;
-        
-        
         int j = 0;
         int i = 0;
+        int count = 0;
         while (j < patternLen && i < matchLen)
         {
             char m = matchCPtr[i];
             char p = patternCPtr[j];
             
-            cout << " patternCPtr[" << j << "] (" << p <<") != matchCPtr[" << i << "] ("<< m <<")" << endl;
+            cout << "第"<< ++count << "次比较： patternCPtr[" << j << "] (" << p <<") != matchCPtr[" << i << "] ("<< m <<")" << endl;
             
-            if (j != -1 || p == m)
+            if (j == -1 || p == m)
             {
                 i++;
                 j++;
@@ -191,6 +184,8 @@ public:
             
         }
         
+        delete [] next;
+        
         if (j == patternLen)
         {
             return i - j;
@@ -200,26 +195,44 @@ public:
         
         return (int)(std::string::npos);
     }
+    
+
 };
 
 int main()
 {
     StringSample ss;
     int index = 0;
-    string matchStr = "ABABCDABAACDH";
-    string patternStr = "AACA";
+    string matchStr = "BBC ABCDAB ABCDABCDABDE";
+    string patternStr = "ABCDABD";
     
-    cout << "========暴力搜索=======" << endl;
+    cout << "========暴力搜索=======" <<  matchStr <<"  模式串：" << patternStr << endl;
     index = ss.violenceSearchIndexOf(matchStr, patternStr);
     cout << "搜索到 : " << index << endl;
 
-    cout << "========KMP搜索=======" << endl;
+    cout << "========KMP搜索=======" <<  matchStr <<"  模式串：" << patternStr << endl;
     index = ss.kmpSearchIndexOf(matchStr, patternStr);
     cout << "搜索到 : " << index << endl;
+    
+//    cout << "========KMPV2搜索=======: 匹配串" <<  "ABCD" <<"  模式串：" << "BC" << endl;
+//    index = ss.kmpSearchIndexOfV2("ABCD", "BC");
+//    cout << "搜索到 : " << index << endl;
 
     
+    
+    cout << "======Next函数对比======" << "ABABCABAA" << endl;
     ss.getNext("ABABCABAA");
+    
     ss.get_next("ABABCABAA");
+    
+    
+    
+    cout << "======Next函数对比======" << patternStr << endl;
+    ss.getNext(patternStr);
+    
+    ss.get_next(patternStr);
+    
+    
     
     return 0;
 }
