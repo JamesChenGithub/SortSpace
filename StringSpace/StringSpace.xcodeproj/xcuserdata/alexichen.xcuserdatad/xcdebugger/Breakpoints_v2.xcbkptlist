@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "StringSpace/main.cpp"
-            timestampString = "535450988.471046"
+            timestampString = "535458422.47857"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "200"
@@ -26,13 +26,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "StringSpace/main.cpp"
-            timestampString = "535450988.471399"
+            timestampString = "535458422.478931"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "349"
-            endingLineNumber = "349"
-            landmarkName = "main()"
-            landmarkType = "9">
+            startingLineNumber = "92"
+            endingLineNumber = "92"
+            landmarkName = "violenceReverseSearchIndexOf(const string matchStr, const string patternStr)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

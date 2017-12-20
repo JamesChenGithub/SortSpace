@@ -16,7 +16,7 @@ using namespace std;
 class StringSample
 {
 public:
-    
+
     // 暴力搜索
     int violenceSearchIndexOf(const string matchStr, const string patternStr)
     {
@@ -24,6 +24,10 @@ public:
         int patternLen = (int)patternStr.length();
         if (patternLen > matchLen)
         {
+            return (int)(std::string::npos);
+        }
+        
+        if (patternLen == 0) {
             return (int)(std::string::npos);
         }
         
@@ -60,6 +64,50 @@ public:
         
         return (int)(std::string::npos);
     }
+    
+    // 逆向暴力搜索
+    int violenceReverseSearchIndexOf(const string matchStr, const string patternStr)
+    {
+        int matchLen =  (int)matchStr.length();
+        int patternLen = (int)patternStr.length();
+        if (patternLen > matchLen)
+        {
+            return (int)(std::string::npos);
+        }
+        
+        if (patternLen == 0)
+        {
+            return (int)(std::string::npos);
+        }
+        
+        const char *matchCPtr = matchStr.c_str();
+        const char *patternCPtr = patternStr.c_str();
+        int count = 0;
+        
+        int s_index = patternLen;
+        int p_index = 0;
+        
+        while (s_index < matchLen)
+        {
+            p_index = patternLen;
+            cout << "第"<< ++count << "次比较： patternCPtr[" << p_index-1 << "] (" << patternCPtr[p_index-1] <<") != matchCPtr[" << s_index-1 << "] ("<< matchStr[s_index-1] <<")" << endl;
+            while (matchStr[--s_index] == patternCPtr[--p_index])
+            {
+                cout << "第"<< ++count << "次比较： patternCPtr[" << p_index << "] (" << patternCPtr[p_index] <<") != matchCPtr[" << s_index << "] ("<< matchStr[s_index] <<")" << endl;
+                if (p_index == 0)
+                {
+                    return s_index;
+                }
+            }
+            
+            s_index += (patternLen - p_index) + 1;
+//            cout << "第"<< count << "次比较 后 s_index = " << s_index << "    matchCPtr[" << s_index << "] ("<< matchStr[s_index] <<")"  << endl;
+        }
+        
+        
+        return (int)(std::string::npos);
+    }
+    
     
     
     // KMP搜索
@@ -155,7 +203,10 @@ public:
         {
             return (int)(std::string::npos);
         }
-        
+        if (patternLen == 0)
+        {
+            return (int)(std::string::npos);
+        }
         const char *matchCPtr = matchStr.c_str();
         const char *patternCPtr = patternStr.c_str();
         
@@ -197,6 +248,10 @@ public:
     }
     
 
+    
+    // BM算法
+    
+    
 };
 
 int main()
@@ -208,6 +263,10 @@ int main()
     
     cout << "========暴力搜索=======" <<  matchStr <<"  模式串：" << patternStr << endl;
     index = ss.violenceSearchIndexOf(matchStr, patternStr);
+    cout << "搜索到 : " << index << endl;
+    
+    cout << "========逆向暴力搜索=======" <<  matchStr <<"  模式串：" << patternStr << endl;
+    index = ss.violenceReverseSearchIndexOf(matchStr, patternStr);
     cout << "搜索到 : " << index << endl;
 
     cout << "========KMP搜索=======" <<  matchStr <<"  模式串：" << patternStr << endl;
