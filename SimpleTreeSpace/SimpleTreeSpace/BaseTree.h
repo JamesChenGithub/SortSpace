@@ -23,8 +23,8 @@ using namespace std;
 template <class T>
 struct BTNode
 {
-private:
-    T mValue;
+public:
+    T          mValue;
     BTNode<T>  *mLeft;
     BTNode<T>  *mRight;
     
@@ -192,7 +192,9 @@ public:
     
     
     
-    void printTreeLikeTree(std::function<void (T)> printFunc) const
+    void printTreeLikeTree(std::function<void (T)> printFunc = [](T v){
+        cout << v;
+    }) const
     {
         typedef std::tuple<int, int, const BTNode<T> *> BTNodeTuple;
         std::vector<BTNodeTuple> rootQueue;
@@ -202,7 +204,7 @@ public:
         
         rootQueue.push_back(std::make_tuple(height, 2 * height - 1, this));
         std::function<void (T)> printCall= printFunc;
-        const char place = '_';
+        const char place = ' ';
         do
         {
             // 输出 rootQueue

@@ -56,16 +56,26 @@ int main()
 //        cout << endl;
 //    }
     
-    int bstArray[8] = {4,2,3,6,1,7,5,8};
+    int bstArray[8] = {8,6,10,23,12,59,13,46};
     
     BSTree<int> *bstRoot = BSTree<int>::buildBSTree(bstArray, 8);
     
     bstRoot->printTreeLikeTree([](int value){
-        cout << value << " ";
+        cout << value;
     });
     
-
     
-   
+    bstRoot->insertNode(std::move(bstRoot), 1);
+    bstRoot->printTreeLikeTree();
+    
+    bstRoot->insertNode(std::move(bstRoot), 7);
+    bstRoot->printTreeLikeTree();
+    
+    bstRoot->searchMin();
+    bstRoot->searchMax();
+    
+    bstRoot->search(23);
+    
+    bstRoot->search(3);
     return 0;
 }
