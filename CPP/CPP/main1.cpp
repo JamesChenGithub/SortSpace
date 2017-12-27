@@ -400,7 +400,7 @@ typedef struct TreeNode{
     void printByLevel()
     {
         typedef std::pair<int, TreeNode *>  TreeNodePair;
-        TreeNodePair pair;
+//        TreeNodePair pair;
         int level = 0;
         std::queue<TreeNodePair> queue;
         queue.push(std::make_pair(level, this));
