@@ -25,28 +25,12 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SimpleTreeSpace/SimpleTreeSpace/BSTree.h"
-            timestampString = "536036756.313521"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
-            landmarkName = "buildBSTree(T *treelist, int listSize, std::function&lt;bool (const T rootV,const T insertValue)&gt; compareFunc = [](const T rootV,const T insertValue)-&gt;bool{ return rootV &gt; insertValue; })"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "SimpleTreeSpace/SimpleTreeSpace/main.cpp"
-            timestampString = "536036756.314137"
+            timestampString = "536076330.170161"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "68"
-            endingLineNumber = "68"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
             landmarkName = "main()"
             landmarkType = "9">
          </BreakpointContent>

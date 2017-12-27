@@ -44,19 +44,136 @@ public:
         do {
             
             T value = *(treelist + index);
-            root->insertNode(root, value, comFunc);
+            BSTree::insertNode(root, value, comFunc);
             index++;
         } while (index < listSize);
         
         return root;
     }
     
-    void deleteNode(const T value)
+    static void deleteNode(BSTree<T> *&root, const T value)
     {
+        BSTree<T> *valueRoot = nullptr;
+        BSTree<T> *valueNode = BSTree::search(root, value);
+        
+        if (valueNode == nullptr)
+        {
+            cout << "没有该结点，不用删除" << endl;
+            return;
+        }
+        
+        
+            if (valueNode->mLeft == nullptr && valueNode->mRight == nullptr)
+            {
+                if (valueRoot == nullptr)
+                {
+                    delete valueNode;
+                    valueNode = nullptr;
+                    // 可能删除概结点
+                    
+                    if (valueNode == root)
+                    {
+                        root = nullptr;
+                    }
+                }
+                else
+                {
+                    if (valueRoot->mLeft == valueNode)
+                    {
+                        valueRoot->mLeft = nullptr;
+                    }
+                    else if (valueRoot->mRight == valueNode)
+                    {
+                        valueRoot->mRight= nullptr;
+                    }
+                    
+                    delete valueNode;
+                    valueNode = nullptr;
+                }
+            }
+            else if (valueNode->mLeft && valueNode->mRight == nullptr)
+            {
+                if (valueNode == root)
+                {
+                    root = (BSTree<T> *)valueNode->mLeft;
+                    
+                    valueNode->mLeft = nullptr;
+                    
+                    delete valueNode;
+                    valueNode = nullptr;
+                }
+                else
+                {
+                    if (valueRoot)
+                    {
+                        valueRoot->mLeft = valueNode->mLeft;
+                        
+                        valueNode->mLeft = nullptr;
+                        
+                        delete valueNode;
+                        valueNode = nullptr;
+                    }
+                    else
+                    {
+                        // 代码有误
+                    }
+                }
+            }
+            else if (valueNode->mLeft == nullptr && valueNode->mRight)
+            {
+                if (valueNode == root)
+                {
+                    root = (BSTree<T> *)valueNode->mRight;
+                    
+                    valueNode->mRight = nullptr;
+                    
+                    delete valueNode;
+                    valueNode = nullptr;
+                }
+                else
+                {
+                    if (valueRoot)
+                    {
+                        valueRoot->mRight = valueNode->mRight;
+                        
+                        valueNode->mRight = nullptr;
+                        
+                        delete valueNode;
+                        valueNode = nullptr;
+                    }
+                    else
+                    {
+                        // 代码有误
+                    }
+                }
+            }
+            else
+            {
+                BSTree<T> *successor = valueNode->searchSuccessor();
+                T temp = successor->mValue;
+                //删除后继结点
+                BSTree::deleteNode(root, successor->mValue);
+                valueNode->mValue = temp;
+            }
+        
+        
+        
         
     }
     
-    void insertNode(BTNode<T> *&&root,const T value, std::function<bool (const T rootV,const T insertValue)> compareFunc = [](const T rootV,const T insertValue)->bool{
+    BSTree<T> * searchSuccessor()
+    {
+        if (this->mRight)
+        {
+            return (BSTree<T> *)BSTree::searchMin((BSTree<T> *)this->mRight);
+        }
+        else
+        {
+            return (BSTree<T> *)(this->mLeft);
+        }
+    }
+    
+    static void insertNode(BTNode<T> *&&root,const T value, std::function<bool (const T rootV,const T insertValue)> compareFunc = [](const T rootV,const T insertValue)->bool{
         return insertValue < rootV;
     })
     {
@@ -70,82 +187,159 @@ public:
             bool isLittle = compareFunc(rv, value);
             if (isLittle)
             {
-                insertNode(std::move(root->mLeft), value, compareFunc);
+                BSTree::insertNode(std::move(root->mLeft), value, compareFunc);
             }
             else
             {
-                insertNode(std::move(root->mRight), value, compareFunc);
+                BSTree::insertNode(std::move(root->mRight), value, compareFunc);
             }
         }
     }
     
-    const BSTree<T> *&& searchMin(std::function<void (T)> func = [](T n){ cout << n << "  ";}) const
+    static const BSTree<T> * searchMin(BSTree<T> *root, std::function<void (T)> func = [](T n){ cout << n << "  ";})
     {
-        func(this->mValue);
-        if (this->mLeft == nullptr)
+        if (root)
         {
-            cout << endl;
-            return std::move(this);
-        }
-        else
-        {
-            BSTree<T> *leftTree = (BSTree<T> *)this->mLeft;
-            return leftTree->searchMin(func);
-        }
-    }
-    
-    const BSTree<T> *&& searchMax(std::function<void (T)> func = [](T n){ cout << n << "  ";}) const
-    {
-        func(this->mValue);
-        if (this->mRight == nullptr)
-        {
-            cout << endl;
-            return std::move(this);
-        }
-        else
-        {
-            BSTree<T> *rightTree = (BSTree<T> *)this->mRight;
-            return rightTree->searchMax(func);
-        }
-    }
-    
-    const T search(const T rootV, std::function<void (T)> func = [](T n){ cout << n << "  ";}) const
-    {
-        func(this->mValue);
-        if (this->mValue == rootV)
-        {
-            cout << endl;
-            return this->mValue;
-        }
-        else if (rootV < this->mValue)
-        {
-            if (this->mLeft)
+            std::function<void (T)> function = func;
+            func(root->mValue);
+            if (root->mLeft == nullptr)
             {
-                BSTree<T> *leftTree = (BSTree<T> *)this->mLeft;
-                return leftTree->search(rootV);
+                cout << endl;
+                return root;
             }
             else
             {
-                cout << "not found" << endl;
-                return -1;
-            }
-        }
-        else if (rootV > this->mValue)
-        {
-            if (this->mRight)
-            {
-                BSTree<T> *rightTree = (BSTree<T> *)this->mRight;
-                return rightTree->search(rootV);
-            }
-            else
-            {
-                cout << "not found" << endl;
-                return -1;
+                BSTree<T> *leftTree = (BSTree<T> *)root->mLeft;
+                return BSTree::searchMin(leftTree, function);
             }
         }
         else
         {
-            return -1;
+            return nullptr;
+        }
+    }
+    
+    static const BSTree<T> * searchMax(BSTree<T> *root, std::function<void (T)> func = [](T n){ cout << n << "  ";})
+    {
+        if (root)
+        {
+            std::function<void (T)> function = func;
+            func(root->mValue);
+            if (root->mRight == nullptr)
+            {
+                cout << endl;
+                return root;
+            }
+            else
+            {
+                BSTree<T> *rightTree = (BSTree<T> *)root->mRight;
+                return BSTree::searchMax(rightTree, function);
+            }
+        }
+        else
+        {
+            return nullptr;
+        }
+    }
+    
+    
+    static BSTree<T> * search(BSTree<T> *root, const T rootV, std::function<void (T)> func = [](T n){ cout << n << "  ";})
+    {
+        if (root)
+        {
+            func(root->mValue);
+            if (root->mValue == rootV)
+            {
+                cout << endl;
+                return std::move(root);
+            }
+            else if (rootV < root->mValue)
+            {
+                if (root->mLeft)
+                {
+                    BSTree<T> *leftTree = (BSTree<T> *)root->mLeft;
+                    return BSTree::search(leftTree, rootV, func);
+                }
+                else
+                {
+                    cout << "not found" << endl;
+                    return nullptr;
+                }
+            }
+            else if (rootV > root->mValue)
+            {
+                if (root->mRight)
+                {
+                    BSTree<T> *rightTree = (BSTree<T> *)root->mRight;
+                    return BSTree::search(rightTree, rootV, func);
+                }
+                else
+                {
+                    cout << "not found" << endl;
+                    return nullptr;
+                }
+            }
+            else
+            {
+                return nullptr;
+            }
+        }
+        else
+        {
+            return nullptr;
+        }
+    }
+    
+    static const BSTree<T> * search(BSTree<T> *root, const T rootV, const BSTree<T> *&searvalueParent,std::function<void (T)> func = [](T n){ cout << n << "  ";})
+    {
+        if (root)
+        {
+            func(root->mValue);
+            if (root->mValue == rootV)
+            {
+                cout << endl;
+                return root;
+            }
+            else if (rootV < root->mValue)
+            {
+                if (root->mLeft)
+                {
+                    BSTree<T> *leftTree = (BSTree<T> *)root->mLeft;
+                    searvalueParent = root;
+                    return BSTree::search(leftTree, rootV, searvalueParent, func);
+                }
+                else
+                {
+                    cout << "not found" << endl;
+                    searvalueParent = nullptr;
+                    return nullptr;
+                }
+            }
+            else if (rootV > root->mValue)
+            {
+                if (root->mRight)
+                {
+                    BSTree<T> *rightTree = (BSTree<T> *)root->mRight;
+                    searvalueParent = root;
+                    return BSTree::search(rightTree, rootV, searvalueParent);
+                }
+                else
+                {
+                    cout << "not found" << endl;
+                    searvalueParent = nullptr;
+                    return nullptr;
+                }
+            }
+            else
+            {
+                searvalueParent = nullptr;
+                return nullptr;
+            }
+        }
+        else
+        {
+            searvalueParent = nullptr;
+            return nullptr;
         }
     }
 };
