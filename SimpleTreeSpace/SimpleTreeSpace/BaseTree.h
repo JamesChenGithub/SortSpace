@@ -28,8 +28,9 @@ public:
     BTNode<T>  *mLeft;
     BTNode<T>  *mRight;
     
-private:
+public:
     static std::function<void (T)> valuePrintFunc;
+    static bool mPrintValueInDelete;
     
 public:
     BTNode<T>():mLeft(nullptr), mRight(nullptr) {
@@ -42,7 +43,11 @@ public:
     
     ~BTNode<T>()
     {
-        printValue();
+        if (mPrintValueInDelete)
+        {
+            printValue();
+        }
+        
         if (mLeft)
         {
             delete mLeft;
@@ -438,6 +443,8 @@ std::function<void (T)> BTNode<T>::valuePrintFunc = [] (T v) {
     cout << v << " ";
 };
 
+template <class T>
+bool BTNode<T>::mPrintValueInDelete = true;
 
 
 

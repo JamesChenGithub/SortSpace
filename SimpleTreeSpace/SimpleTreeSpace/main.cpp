@@ -78,17 +78,49 @@ int main()
     
     BSTree<int>::search(bstRoot, 3);
     
+    BSTree<int>::mPrintValueInDelete = false;
+    
+    cout << "===========" << endl;
+    BSTree<int>::deleteNode(bstRoot, 1);
+    bstRoot->printTreeLikeTree();
+    
+    cout << "===========" << endl;
     BSTree<int>::deleteNode(bstRoot, 13);
     bstRoot->printTreeLikeTree();
     
+    cout << "===========" << endl;
     BSTree<int>::deleteNode(bstRoot, 7);
     bstRoot->printTreeLikeTree();
     
+    cout << "===========" << endl;
     BSTree<int>::deleteNode(bstRoot, 8);
     bstRoot->printTreeLikeTree();
     
+    cout << "===========" << endl;
     BSTree<int>::deleteNode(bstRoot, 23);
     bstRoot->printTreeLikeTree();
+    
+    cout << "===========" << endl;
+    BSTree<int>::insertNode(bstRoot, 8);
+    bstRoot->printTreeLikeTree();
+    
+    cout << "===========" << endl;
+    BSTree<int>::insertNode(bstRoot, 7);
+    bstRoot->printTreeLikeTree();
+    
+    
+    cout << "===========" << endl;
+    BSTree<int>::insertNode(bstRoot, 9);
+    bstRoot->printTreeLikeTree();
+    
+    
+    cout << "===========" << endl;
+    BSTree<int>::deleteNode(bstRoot, 8);
+    bstRoot->printTreeLikeTree();
+    
+    BSTree<int>::deleteNode(bstRoot, 10);
+    bstRoot->printTreeLikeTree();
+    
     
     return 0;
 }

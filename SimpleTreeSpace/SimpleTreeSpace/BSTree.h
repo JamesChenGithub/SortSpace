@@ -54,7 +54,7 @@ public:
     static void deleteNode(BSTree<T> *&root, const T value)
     {
         BSTree<T> *valueRoot = nullptr;
-        BSTree<T> *valueNode = BSTree::search(root, value);
+        BSTree<T> *valueNode = BSTree::search(root, value, valueRoot);
         
         if (valueNode == nullptr)
         {
@@ -200,7 +200,6 @@ public:
     {
         if (root)
         {
-            std::function<void (T)> function = func;
             func(root->mValue);
             if (root->mLeft == nullptr)
             {
@@ -210,7 +209,7 @@ public:
             else
             {
                 BSTree<T> *leftTree = (BSTree<T> *)root->mLeft;
-                return BSTree::searchMin(leftTree, function);
+                return BSTree::searchMin(leftTree, func);
             }
         }
         else
@@ -290,7 +289,7 @@ public:
         }
     }
     
-    static const BSTree<T> * search(BSTree<T> *root, const T rootV, const BSTree<T> *&searvalueParent,std::function<void (T)> func = [](T n){ cout << n << "  ";})
+    static BSTree<T> * search(BSTree<T> *root, const T rootV,  BSTree<T> *&searvalueParent,std::function<void (T)> func = [](T n){ cout << n << "  ";})
     {
         if (root)
         {
