@@ -202,9 +202,11 @@ public:
     }) const
     {
         
-        cout << "当前树" << (BTNode::isAVLTree(this) ? "是" : "不是") << "平衡二叉树" << endl;
+        cout << "当前树" << (BTNode::isAVLTree(this) ? "是" : "不是") << "平衡二叉树, " << (this->isBSTree() ? "是" : "不是") <<"二叉查找树, " << (this->isAVLBSTree() ? "是" : "不是") << "平衡二叉查找树" << endl;
         int avlheight = 0;
         cout << "当前树" << (BTNode::isAVLTree(this, avlheight) ? "是" : "不是") << "平衡二叉树" << endl;
+        
+        
         
         typedef std::tuple<int, int, const BTNode<T> *> BTNodeTuple;
         std::vector<BTNodeTuple> rootQueue;
@@ -334,11 +336,7 @@ public:
         
     }
     
-    
-//    int printLikeTree() const
-//    {
-//        
-//    }
+
     
     int preOrderTraversal() const
     {
@@ -451,7 +449,8 @@ public:
         const int vecCount = tVec.size();
         do
         {
-            nodeCount++;
+//            nodeCount++;
+//            if ()
             
             
         }while(nodeCount < vecCount);
@@ -514,9 +513,63 @@ public:
         return true;
     }
     
+    bool isBSTree(std::function<bool (T,T)> func = [](T v1, T v2)->bool{
+        return v1 < v2;
+    }) const
+    {
+        
+        bool isLeft = true;
+        if (mLeft)
+        {
+            isLeft = func(mLeft->mValue, mValue);
+        }
+        
+        if (!isLeft)
+        {
+            return false;
+        }
+        
+        bool isRight = true;
+        if (mRight)
+        {
+            isRight = func(mValue, mRight->mValue);
+        }
+        
+        if (!isRight)
+        {
+            return false;
+        }
+        
+        if (mLeft)
+        {
+            if (mRight)
+            {
+                return mLeft->isBSTree(func) &&  mRight->isBSTree(func);
+            }
+            else
+            {
+                return mLeft->isBSTree(func);
+            }
+        }
+        else
+        {
+            if (mRight)
+            {
+                return mRight->isBSTree(func);
+            }
+            else
+            {
+                return true;
+            }
+
+        }
+
+    }
+    
     bool isAVLBSTree() const
     {
-        // 是否是平
+        // 是否是
+        return BTNode::isAVLTree(this) && this->isBSTree();
     }
     
     
@@ -848,6 +901,31 @@ public:
     }
     
     
+    //=================================================
+    // 创建平衡二叉查找树
+
+//    static BTNode<T> *buildAVLBTNode(T *treelist, int listSize, std::function<bool (const T rootV,const T insertValue)> compareFunc = [](const T rootV,const T insertValue)->bool{
+//        return rootV > insertValue;
+//    })
+//    {
+//        if (treelist == nullptr || listSize <= 0)
+//        {
+//            return nullptr;
+//        }
+//        T rtv = *treelist;
+//        BTNode<T> *root = new BTNode(rtv);
+//        int index = 1;
+//        std::function<bool (const T rootV,const T insertValue)>  comFunc = compareFunc;
+//
+//        do {
+//
+//            T value = *(treelist + index);
+//            BTNode::insertNode(root, value, comFunc);
+//            index++;
+//        } while (index < listSize);
+//
+//        return root;
+//    }
     
 };
 
