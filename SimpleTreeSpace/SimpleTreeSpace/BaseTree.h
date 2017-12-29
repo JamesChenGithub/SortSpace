@@ -439,8 +439,23 @@ public:
         return root;
     }
     
+    static BTNode<T> *buildTreeBy(T *varray, int size, std::function<bool (T)> func = [](T)->bool {
+        return true;
+    })
+    {
+        std::vector<T> vector;
+        for(int i = 0; i < size; i++)
+        {
+            vector.push_back(*(varray + i));
+        }
+        return BTNode::buildTreeBy(vector, func);
+        
+    }
     
-    static BTNode<T> *buildTreeBy(std::vector<T> tVec)
+    
+    static BTNode<T> *buildTreeBy(std::vector<T> tVec, std::function<bool (T)> func = [](T)->bool {
+        return true;
+    })
     {
         const int vecCount = tVec.size();
         
@@ -450,7 +465,6 @@ public:
         }
         
         BTNode<T> *root = nullptr;
-        T value;
         typedef std::pair<BTNode<T> *, int> BTNodePair;
         std::queue<BTNodePair> queue;
         int nodeCount = 0;
@@ -459,9 +473,20 @@ public:
         {
             if (root == nullptr)
             {
-                root = new BTNode<T>(tVec[0]);
-                queue.push(std::make_pair(root, 0));
-                nodeCount++;
+                T value = tVec[0];
+                bool isnode = func(value);
+                if (isnode)
+                {
+                    cout << "根结点:" << value << endl;
+                    root = new BTNode<T>(tVec[0]);
+                    queue.push(std::make_pair(root, 0));
+                    nodeCount++;
+                }
+                else
+                {
+                    cout << "根结点非法" << endl;
+                    return nullptr;
+                }
             }
             else
             {
@@ -473,22 +498,42 @@ public:
                 
                 if (2*index + 1 < vecCount)
                 {
-                    BTNode<T> *leftNode = new BTNode<T>(tVec[2*index + 1]);
-                    node->mLeft = leftNode;
-                    queue.push({leftNode, 2*index + 1});
                     nodeCount++;
+                    T value = tVec[2*index + 1];
+                    bool isnode = func(value);
+                    if (isnode)
+                    {
+                        cout << "结点:" << node->mValue << "左子树为:" << value << endl;
+                        BTNode<T> *leftNode = new BTNode<T>(value);
+                        node->mLeft = leftNode;
+                        queue.push({leftNode, 2*index + 1});
+                    }
+                    else
+                    {
+                        cout << "结点:" << node->mValue << "左子树为空" << endl;
+                    }
                 }
                 
                 if (2*index + 2 < vecCount)
                 {
-                    BTNode<T> *rightNode = new BTNode<T>(tVec[2*index + 2]);
-                    node->mRight = rightNode;
-                    queue.push({rightNode, 2*index + 2});
                     nodeCount++;
+                    T value = tVec[2*index + 2];
+                    bool isnode = func(value);
+                    if (isnode)
+                    {
+                        cout << "结点:" << node->mValue << "右子树为:" << value << endl;
+                        BTNode<T> *rightNode = new BTNode<T>(value);
+                        node->mRight = rightNode;
+                        queue.push({rightNode, 2*index + 2});
+                    }
+                    else
+                    {
+                        cout << "结点:" << node->mValue << "右子树为空" << endl;
+                    }
                 }
             }
             
-        }while(nodeCount < vecCount);
+        }while(nodeCount < vecCount && !queue.empty());
         
         root->printTreeLikeTree();
         return root;
@@ -962,6 +1007,57 @@ public:
 //
 //        return root;
 //    }
+    
+    
+    static void singleRotateLL(BTNode<T> *&root)
+    {
+        if (root)
+        {
+            BTNode<T> *left = root->mLeft;
+            
+            if (left)
+            {
+                root->mLeft = left->mRight;
+                left->mRight = root;
+                root = left;
+            }
+        }
+    }
+    
+    static void singleRotateRR(BTNode<T> *&root)
+    {
+        if (root)
+        {
+            BTNode<T> *right = root->mRight;
+            if (right)
+            {
+                root->mRight = right->mLeft;
+                right->mLeft = root;
+                root = right;
+            }
+            
+        }
+    }
+    
+    static void doublerotateLR(BTNode<T> *&root)
+    {
+        if (root->mLeft)
+        {
+            singleRotateRR(root->mLeft);
+            singleRotateLL(root);
+        }
+    }
+    
+    static void doublerotateRL(BTNode<T> *&root)
+    {
+        if (root->mRight)
+        {
+            singleRotateLL(root->mRight);
+            singleRotateRR(root);
+        }
+    }
+    
+    
     
 };
 

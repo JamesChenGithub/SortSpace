@@ -126,9 +126,97 @@ int main()
     bstRoot = nullptr;
     
     //===============================
-    
+    cout << endl << "===========" << endl;
+    BTNode<int>::mPrintValueInDelete = true;
     std::vector<int> vec = {1,4,7,2,5,8,3,6,9};
     BTNode<int> *root = BTNode<int>::buildTreeBy(vec);
+    if (root)
+    {
+        delete root;
+        root = nullptr;
+    }
+    
+    cout << endl << "===========" << endl;
+    int array[9] = {1,4,7,2,5,8,3,6,9};
+    root = BTNode<int>::buildTreeBy(array, 9);
+    if (root)
+    {
+        delete root;
+        root = nullptr;
+    }
+
+    
+    cout << endl << "===========" << endl;
+    int array2[15] = {1,4,7,2,5,0,8,3, 0, 10,6, 0,9,11,0};
+    root = BTNode<int>::buildTreeBy(array2, 15, [](int v)->bool{
+        return v > 0;
+    });
+    if (root)
+    {
+        delete root;
+        root = nullptr;
+    }
+    
+    
+    cout << endl << "===========" << endl;
+    int arrayLL[4] = {1,2,0,3};
+    root = BTNode<int>::buildTreeBy(arrayLL, 4,[](int v)->bool{
+        return v > 0;
+    });
+    
+    
+    BTNode<int>::singleRotateLL(root);
+    root->printTreeLikeTree();
+    
+    if (root)
+    {
+        delete root;
+        root = nullptr;
+    }
+    
+    cout << endl << "===========" << endl;
+    int arrayRR[7] = {1,0, 2,0,0,0,3};
+    root = BTNode<int>::buildTreeBy(arrayRR, 7,[](int v)->bool{
+        return v > 0;
+    });
+    
+    
+    BTNode<int>::singleRotateRR(root);
+    root->printTreeLikeTree();
+    
+    if (root)
+    {
+        delete root;
+        root = nullptr;
+    }
+    
+    cout << endl << "===========" << endl;
+    int arrayLR[5] = {3, 1, 0, 0, 2};
+    root = BTNode<int>::buildTreeBy(arrayLR, 5,[](int v)->bool{
+        return v > 0;
+    });
+    
+    
+    BTNode<int>::doublerotateLR(root);
+    root->printTreeLikeTree();
+    
+    if (root)
+    {
+        delete root;
+        root = nullptr;
+    }
+    
+    
+    cout << endl << "===========" << endl;
+    int arrayRL[6] = {1, 0, 3, 0, 0, 2};
+    root = BTNode<int>::buildTreeBy(arrayRL, 6,[](int v)->bool{
+        return v > 0;
+    });
+    
+    
+    BTNode<int>::doublerotateRL(root);
+    root->printTreeLikeTree();
+    
     if (root)
     {
         delete root;
