@@ -341,6 +341,23 @@ public:
             return nullptr;
         }
     }
+    
+    virtual bool isBSTree(std::function<bool(T,T)> func = []{}) const
+    {
+        
+    }
+    
+    virtual bool isAVLTree() const
+    {
+        int leftheight = mLeft ? mLeft->treeHeight() : 0;
+        int rightheight = mRight ? mRight->treeHeight() : 0;
+        
+        if (abs(leftheight - rightheight) >= 2)
+        {
+            return false;
+        }
+        return true;
+    }
 };
 
 #endif /* BSTree_H */

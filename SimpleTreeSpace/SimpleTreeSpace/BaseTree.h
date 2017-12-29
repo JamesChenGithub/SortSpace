@@ -201,6 +201,11 @@ public:
         cout << v;
     }) const
     {
+        
+        cout << "当前树" << (BTNode::isAVLTree(this) ? "是" : "不是") << "平衡二叉树" << endl;
+        int avlheight = 0;
+        cout << "当前树" << (BTNode::isAVLTree(this, avlheight) ? "是" : "不是") << "平衡二叉树" << endl;
+        
         typedef std::tuple<int, int, const BTNode<T> *> BTNodeTuple;
         std::vector<BTNodeTuple> rootQueue;
         std::vector<BTNodeTuple> childQueue;
@@ -435,6 +440,414 @@ public:
         
         return root;
     }
+    
+    
+    static BTNode<T> *buildTreeBy(std::vector<T> tVec)
+    {
+        BTNode<T> *root = nullptr;
+        T value;
+        std::queue<BTNode<T> *> queue;
+        int nodeCount = 0;
+        const int vecCount = tVec.size();
+        do
+        {
+            nodeCount++;
+            
+            
+        }while(nodeCount < vecCount);
+        
+        return root;
+    }
+    
+public:
+//    定义
+//
+//    父节点的左子树和右子树的高度之差不能大于1，也就是说不能高过1层，否则该树就失衡了，此时就要旋转节点，在
+
+    static  bool isAVLTree(const BTNode<T> *root)
+    {
+        
+        if (!root)
+        {
+            return true;
+        }
+        
+        if (!isAVLTree(root->mLeft))
+        {
+            return false;
+        }
+        
+        if (!isAVLTree(root->mRight))
+        {
+            return false;
+        }
+        
+        
+        int leftheight = root->mLeft ? root->mLeft->treeHeight() : 0;
+        int rightheight = root->mRight ? root->mRight->treeHeight() : 0;
+        
+        if (abs(leftheight - rightheight) >= 2)
+        {
+            return false;
+        }
+        return true;
+    }
+    
+    static bool isAVLTree(const BTNode<T> *root, int& height)
+    {
+        if (!root) return true;
+        
+        int left = 0;
+        
+        int right = 0;
+        
+        if (!isAVLTree(root->mLeft, left)) return false;
+        
+        if (!isAVLTree(root->mRight, right)) return false;
+        
+        if (abs(left - right) >= 2)
+        {
+            return false;
+        }
+        
+        height = left > right ? left + 1 : right + 1;
+        return true;
+    }
+    
+    bool isAVLBSTree() const
+    {
+        // 是否是平
+    }
+    
+    
+    
+    //二叉查找树
+    //二叉查找树（英语：Binary Search Tree），也称二叉搜索树、有序二叉树（英语：ordered binary tree），排序二叉树（英语：sorted binary tree），是指一棵空树或者具有下列性质的二叉树：
+    //
+    //若任意节点的左子树不空，则左子树上所有节点的值均小于它的根节点的值；
+    //若任意节点的右子树不空，则右子树上所有节点的值均大于它的根节点的值；
+    //任意节点的左、右子树也分别为二叉查找树；
+    //没有键值相等的节点。
+    
+public:
+    
+    
+    static BTNode<T> *buildBTNode(T *treelist, int listSize, std::function<bool (const T rootV,const T insertValue)> compareFunc = [](const T rootV,const T insertValue)->bool{
+        return rootV > insertValue;
+    })
+    {
+        if (treelist == nullptr || listSize <= 0)
+        {
+            return nullptr;
+        }
+        T rtv = *treelist;
+        BTNode<T> *root = new BTNode(rtv);
+        int index = 1;
+        std::function<bool (const T rootV,const T insertValue)>  comFunc = compareFunc;
+        
+        do {
+            
+            T value = *(treelist + index);
+            BTNode::insertNode(root, value, comFunc);
+            index++;
+        } while (index < listSize);
+        
+        return root;
+    }
+    
+    static void deleteNode(BTNode<T> *&root, const T value)
+    {
+        cout << "将删除 : " << value << "结点" << endl;
+        BTNode<T> *valueRoot = nullptr;
+        BTNode<T> *valueNode = BTNode::search(root, value, valueRoot);
+        
+        if (valueNode == nullptr)
+        {
+            cout << "没有该结点，不用删除" << endl;
+            return;
+        }
+        
+        
+        if (valueNode->mLeft == nullptr && valueNode->mRight == nullptr)
+        {
+            if (valueRoot == nullptr)
+            {
+                delete valueNode;
+                valueNode = nullptr;
+                // 可能删除概结点
+                
+                if (valueNode == root)
+                {
+                    root = nullptr;
+                }
+            }
+            else
+            {
+                if (valueRoot->mLeft == valueNode)
+                {
+                    valueRoot->mLeft = nullptr;
+                }
+                else if (valueRoot->mRight == valueNode)
+                {
+                    valueRoot->mRight= nullptr;
+                }
+                
+                delete valueNode;
+                valueNode = nullptr;
+            }
+        }
+        else if (valueNode->mLeft && valueNode->mRight == nullptr)
+        {
+            if (valueNode == root)
+            {
+                root = (BTNode<T> *)valueNode->mLeft;
+                
+                valueNode->mLeft = nullptr;
+                
+                delete valueNode;
+                valueNode = nullptr;
+            }
+            else
+            {
+                if (valueRoot)
+                {
+                    valueRoot->mLeft = valueNode->mLeft;
+                    
+                    valueNode->mLeft = nullptr;
+                    
+                    delete valueNode;
+                    valueNode = nullptr;
+                }
+                else
+                {
+                    // 代码有误
+                }
+            }
+        }
+        else if (valueNode->mLeft == nullptr && valueNode->mRight)
+        {
+            if (valueNode == root)
+            {
+                root = (BTNode<T> *)valueNode->mRight;
+                
+                valueNode->mRight = nullptr;
+                
+                delete valueNode;
+                valueNode = nullptr;
+            }
+            else
+            {
+                if (valueRoot)
+                {
+                    valueRoot->mRight = valueNode->mRight;
+                    
+                    valueNode->mRight = nullptr;
+                    
+                    delete valueNode;
+                    valueNode = nullptr;
+                }
+                else
+                {
+                    // 代码有误
+                }
+            }
+        }
+        else
+        {
+            BTNode<T> *successor = valueNode->searchSuccessor();
+            T temp = successor->mValue;
+            //删除后继结点
+            BTNode::deleteNode(root, successor->mValue);
+            valueNode->mValue = temp;
+        }
+        
+        
+        
+        
+    }
+    
+    BTNode<T> * searchSuccessor()
+    {
+        if (this->mRight)
+        {
+            return (BTNode<T> *)BTNode::searchMin((BTNode<T> *)this->mRight);
+        }
+        else
+        {
+            return (BTNode<T> *)(this->mLeft);
+        }
+    }
+    
+    static void insertNode(BTNode<T> *&root,const T value, std::function<bool (const T rootV,const T insertValue)> compareFunc = [](const T rootV,const T insertValue)->bool{
+        return insertValue < rootV;
+    })
+    {
+        if (root == nullptr)
+        {
+            root = new BTNode(value);
+        }
+        else
+        {
+            T rv = root->mValue;
+            bool isLittle = compareFunc(rv, value);
+            if (isLittle)
+            {
+                BTNode::insertNode(root->mLeft, value, compareFunc);
+            }
+            else
+            {
+                BTNode::insertNode(root->mRight, value, compareFunc);
+            }
+        }
+    }
+    
+    static const BTNode<T> * searchMin(BTNode<T> *root, std::function<void (T)> func = [](T n){ cout << n << "  ";})
+    {
+        if (root)
+        {
+            func(root->mValue);
+            if (root->mLeft == nullptr)
+            {
+                cout << endl;
+                return root;
+            }
+            else
+            {
+                BTNode<T> *leftTree = (BTNode<T> *)root->mLeft;
+                return BTNode::searchMin(leftTree, func);
+            }
+        }
+        else
+        {
+            return nullptr;
+        }
+    }
+    
+    static const BTNode<T> * searchMax(BTNode<T> *root, std::function<void (T)> func = [](T n){ cout << n << "  ";})
+    {
+        if (root)
+        {
+            std::function<void (T)> function = func;
+            func(root->mValue);
+            if (root->mRight == nullptr)
+            {
+                cout << endl;
+                return root;
+            }
+            else
+            {
+                BTNode<T> *rightTree = (BTNode<T> *)root->mRight;
+                return BTNode::searchMax(rightTree, function);
+            }
+        }
+        else
+        {
+            return nullptr;
+        }
+    }
+    
+    
+    static BTNode<T> * search(BTNode<T> *root, const T rootV, std::function<void (T)> func = [](T n){ cout << n << "  ";})
+    {
+        if (root)
+        {
+            func(root->mValue);
+            if (root->mValue == rootV)
+            {
+                cout << endl;
+                return std::move(root);
+            }
+            else if (rootV < root->mValue)
+            {
+                if (root->mLeft)
+                {
+                    BTNode<T> *leftTree = (BTNode<T> *)root->mLeft;
+                    return BTNode::search(leftTree, rootV, func);
+                }
+                else
+                {
+                    cout << "not found" << endl;
+                    return nullptr;
+                }
+            }
+            else if (rootV > root->mValue)
+            {
+                if (root->mRight)
+                {
+                    BTNode<T> *rightTree = (BTNode<T> *)root->mRight;
+                    return BTNode::search(rightTree, rootV, func);
+                }
+                else
+                {
+                    cout << "not found" << endl;
+                    return nullptr;
+                }
+            }
+            else
+            {
+                return nullptr;
+            }
+        }
+        else
+        {
+            return nullptr;
+        }
+    }
+    
+    static BTNode<T> * search(BTNode<T> *root, const T rootV,  BTNode<T> *&searvalueParent,std::function<void (T)> func = [](T n){ cout << n << "  ";})
+    {
+        if (root)
+        {
+            func(root->mValue);
+            if (root->mValue == rootV)
+            {
+                cout << endl;
+                return root;
+            }
+            else if (rootV < root->mValue)
+            {
+                if (root->mLeft)
+                {
+                    BTNode<T> *leftTree = (BTNode<T> *)root->mLeft;
+                    searvalueParent = root;
+                    return BTNode::search(leftTree, rootV, searvalueParent, func);
+                }
+                else
+                {
+                    cout << "not found" << endl;
+                    searvalueParent = nullptr;
+                    return nullptr;
+                }
+            }
+            else if (rootV > root->mValue)
+            {
+                if (root->mRight)
+                {
+                    BTNode<T> *rightTree = (BTNode<T> *)root->mRight;
+                    searvalueParent = root;
+                    return BTNode::search(rightTree, rootV, searvalueParent);
+                }
+                else
+                {
+                    cout << "not found" << endl;
+                    searvalueParent = nullptr;
+                    return nullptr;
+                }
+            }
+            else
+            {
+                searvalueParent = nullptr;
+                return nullptr;
+            }
+        }
+        else
+        {
+            searvalueParent = nullptr;
+            return nullptr;
+        }
+    }
+    
+    
     
 };
 

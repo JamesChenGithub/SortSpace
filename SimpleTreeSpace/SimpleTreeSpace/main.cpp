@@ -11,7 +11,6 @@
 #include <string>
 
 #include "BaseTree.h"
-#include "BSTree.h"
 
 using namespace std;
 
@@ -58,67 +57,68 @@ int main()
     
     int bstArray[8] = {8,6,10,23,12,59,13,46};
     
-    BSTree<int> *bstRoot = BSTree<int>::buildBSTree(bstArray, 8);
+    BTNode<int> *bstRoot = BTNode<int>::buildBTNode(bstArray, 8);
     
     bstRoot->printTreeLikeTree([](int value){
         cout << value;
     });
     
     
-    bstRoot->insertNode(std::move(bstRoot), 1);
+    bstRoot->insertNode(bstRoot, 1);
     bstRoot->printTreeLikeTree();
     
-    bstRoot->insertNode(std::move(bstRoot), 7);
+    bstRoot->insertNode(bstRoot, 7);
     bstRoot->printTreeLikeTree();
     
-    BSTree<int>::searchMin(bstRoot);
-    BSTree<int>::searchMax(bstRoot);
+    BTNode<int>::searchMin(bstRoot);
+    BTNode<int>::searchMax(bstRoot);
     
-    BSTree<int>::search(bstRoot, 23);
+    BTNode<int>::search(bstRoot, 23);
     
-    BSTree<int>::search(bstRoot, 3);
+    BTNode<int>::search(bstRoot, 3);
     
-    BSTree<int>::mPrintValueInDelete = false;
+    BTNode<int>::mPrintValueInDelete = false;
     
     cout << "===========" << endl;
-    BSTree<int>::deleteNode(bstRoot, 1);
-    bstRoot->printTreeLikeTree();
-    
-    cout << "===========" << endl;
-    BSTree<int>::deleteNode(bstRoot, 13);
+    BTNode<int>::deleteNode(bstRoot, 1);
     bstRoot->printTreeLikeTree();
     
     cout << "===========" << endl;
-    BSTree<int>::deleteNode(bstRoot, 7);
+    BTNode<int>::deleteNode(bstRoot, 13);
     bstRoot->printTreeLikeTree();
     
     cout << "===========" << endl;
-    BSTree<int>::deleteNode(bstRoot, 8);
+    BTNode<int>::deleteNode(bstRoot, 7);
     bstRoot->printTreeLikeTree();
     
     cout << "===========" << endl;
-    BSTree<int>::deleteNode(bstRoot, 23);
+    BTNode<int>::deleteNode(bstRoot, 8);
     bstRoot->printTreeLikeTree();
     
     cout << "===========" << endl;
-    BSTree<int>::insertNode(bstRoot, 8);
+    BTNode<int>::deleteNode(bstRoot, 23);
     bstRoot->printTreeLikeTree();
     
     cout << "===========" << endl;
-    BSTree<int>::insertNode(bstRoot, 7);
+    BTNode<int>::insertNode(bstRoot, 8);
     bstRoot->printTreeLikeTree();
     
-    
     cout << "===========" << endl;
-    BSTree<int>::insertNode(bstRoot, 9);
+    BTNode<int>::insertNode(bstRoot, 7);
     bstRoot->printTreeLikeTree();
     
     
     cout << "===========" << endl;
-    BSTree<int>::deleteNode(bstRoot, 8);
+    BTNode<int>::insertNode(bstRoot, 9);
     bstRoot->printTreeLikeTree();
     
-    BSTree<int>::deleteNode(bstRoot, 10);
+    
+    cout << "===========" << endl;
+    BTNode<int>::deleteNode(bstRoot, 8);
+    bstRoot->printTreeLikeTree();
+    
+    cout << "===========" << endl;
+    BTNode<int>::deleteNode(bstRoot, 10);
     bstRoot->printTreeLikeTree();
     
     
