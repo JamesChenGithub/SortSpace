@@ -9,6 +9,7 @@
 #include <iostream>
 #include <functional>
 #include <string>
+#include <vector>
 
 #include "BaseTree.h"
 
@@ -120,6 +121,19 @@ int main()
     cout << "===========" << endl;
     BTNode<int>::deleteNode(bstRoot, 10);
     bstRoot->printTreeLikeTree();
+    
+    delete bstRoot;
+    bstRoot = nullptr;
+    
+    //===============================
+    
+    std::vector<int> vec = {1,4,7,2,5,8,3,6,9};
+    BTNode<int> *root = BTNode<int>::buildTreeBy(vec);
+    if (root)
+    {
+        delete root;
+        root = nullptr;
+    }
     
     
     return 0;

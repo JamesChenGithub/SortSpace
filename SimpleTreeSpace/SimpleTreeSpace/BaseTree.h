@@ -442,19 +442,55 @@ public:
     
     static BTNode<T> *buildTreeBy(std::vector<T> tVec)
     {
+        const int vecCount = tVec.size();
+        
+        if (vecCount <= 0)
+        {
+            return nullptr;
+        }
+        
         BTNode<T> *root = nullptr;
         T value;
-        std::queue<BTNode<T> *> queue;
+        typedef std::pair<BTNode<T> *, int> BTNodePair;
+        std::queue<BTNodePair> queue;
         int nodeCount = 0;
-        const int vecCount = tVec.size();
+        
         do
         {
-//            nodeCount++;
-//            if ()
-            
+            if (root == nullptr)
+            {
+                root = new BTNode<T>(tVec[0]);
+                queue.push(std::make_pair(root, 0));
+                nodeCount++;
+            }
+            else
+            {
+                BTNodePair nodepair = queue.front();
+                queue.pop();
+                
+                BTNode<T> *node = nodepair.first;
+                int index = nodepair.second;
+                
+                if (2*index + 1 < vecCount)
+                {
+                    BTNode<T> *leftNode = new BTNode<T>(tVec[2*index + 1]);
+                    node->mLeft = leftNode;
+                    queue.push({leftNode, 2*index + 1});
+                    nodeCount++;
+                }
+                
+                if (2*index + 2 < vecCount)
+                {
+                    BTNode<T> *rightNode = new BTNode<T>(tVec[2*index + 2]);
+                    node->mRight = rightNode;
+                    queue.push({rightNode, 2*index + 2});
+                    nodeCount++;
+                }
+            }
             
         }while(nodeCount < vecCount);
         
+        root->printTreeLikeTree();
         return root;
     }
     
