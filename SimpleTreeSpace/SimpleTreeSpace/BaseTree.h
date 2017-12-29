@@ -1057,6 +1057,29 @@ public:
         }
     }
     
+    static BTNode<T> *buildAVLTree(std::vector<T> vec, std::function<bool (const T rootV,const T insertValue)> compareFunc = [](const T rootV,const T insertValue)->bool{
+        return rootV > insertValue;
+    })
+    {
+        if (treelist == nullptr || listSize <= 0)
+        {
+            return nullptr;
+        }
+        T rtv = *treelist;
+        BTNode<T> *root = new BTNode(rtv);
+        int index = 1;
+        std::function<bool (const T rootV,const T insertValue)>  comFunc = compareFunc;
+        
+        do {
+            
+            T value = *(treelist + index);
+            BTNode::insertNode(root, value, comFunc);
+            index++;
+        } while (index < listSize);
+        
+        return root;
+    }
+    
     
     
 };
