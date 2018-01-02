@@ -224,5 +224,37 @@ int main()
     }
     
     
+    
+    //==================================
+    cout << endl << "=================" << "构建平衡二叉查找树" << "=================" << endl;
+    int avlLL[4] = {9,7,0,10};
+    root = BTNode<int>::buildAVLTree(avlLL, 4);
+    root->printTreeLikeTree();
+    
+    BTNode<int>::insertAVLNode(root, 4);
+    root->printTreeLikeTree();
+    
+    BTNode<int>::insertAVLNode(root, 5);
+    root->printTreeLikeTree();
+    
+    BTNode<int>::insertAVLNode(root, 3);
+    root->printTreeLikeTree();
+    
+    BTNode<int>::insertAVLNode(root, 1);
+    root->printTreeLikeTree();
+    
+    BTNode<int>::insertAVLNode(root, 6);
+    root->printTreeLikeTree();
+    
+    BTNode<int>::insertAVLNode(root, 8);
+    root->printTreeLikeTree();
+    
+    BTNode<int>::insertAVLNode(root, 2);
+    root->printTreeLikeTree();
+    
+    BTNode<int>::insertAVLNode(root, 12);
+    root->printTreeLikeTree();
+    
+    root->printTreeLikeTree();
     return 0;
 }

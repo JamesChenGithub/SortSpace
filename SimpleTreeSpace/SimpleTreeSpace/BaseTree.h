@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 #include <tuple>
+#include <stack>
 
 using namespace std;
 
@@ -58,6 +59,10 @@ public:
         {
             delete mRight;
             mRight = nullptr;
+        }
+        if (mPrintValueInDelete)
+        {
+            cout << endl;
         }
     }
     
@@ -113,33 +118,45 @@ public:
         }
     }
     
-//    int treeWhidth() const
-//    {
-//
-//        int lmin;
-//
-//        if (mLeft == nullptr)
-//        {
-//            return 0;
-//        }
-//        else
-//        {
-//
-//        }
-//
-//    }
-//
-//    int treeWhidth(int &lmin, int &rmax) const
-//    {
-//        if (mLeft)
-//        {
-//
-//        }
-//        else
-//        {
-//
-//        }
-//    }
+    static int heightOfTree(BTNode<T> *root)
+    {
+        if (root == nullptr)
+        {
+            return 0;
+        }
+        else
+        {
+            return root->treeHeight();
+        }
+    }
+    
+    //    int treeWhidth() const
+    //    {
+    //
+    //        int lmin;
+    //
+    //        if (mLeft == nullptr)
+    //        {
+    //            return 0;
+    //        }
+    //        else
+    //        {
+    //
+    //        }
+    //
+    //    }
+    //
+    //    int treeWhidth(int &lmin, int &rmax) const
+    //    {
+    //        if (mLeft)
+    //        {
+    //
+    //        }
+    //        else
+    //        {
+    //
+    //        }
+    //    }
     
     void mirror() const
     {
@@ -211,7 +228,7 @@ public:
         typedef std::tuple<int, int, const BTNode<T> *> BTNodeTuple;
         std::vector<BTNodeTuple> rootQueue;
         std::vector<BTNodeTuple> childQueue;
-    
+        
         int height = treeHeight();
         
         rootQueue.push_back(std::make_tuple(height, 2 * height - 1, this));
@@ -302,7 +319,7 @@ public:
                         cout << "\\";
                     }
                 }
-            
+                
             });
             cout << endl;
             // 读入chileQueue
@@ -336,7 +353,7 @@ public:
         
     }
     
-
+    
     
     int preOrderTraversal() const
     {
@@ -540,10 +557,10 @@ public:
     }
     
 public:
-//    定义
-//
-//    父节点的左子树和右子树的高度之差不能大于1，也就是说不能高过1层，否则该树就失衡了，此时就要旋转节点，在
-
+    //    定义
+    //
+    //    父节点的左子树和右子树的高度之差不能大于1，也就是说不能高过1层，否则该树就失衡了，此时就要旋转节点，在
+    
     static  bool isAVLTree(const BTNode<T> *root)
     {
         
@@ -642,9 +659,9 @@ public:
             {
                 return true;
             }
-
+            
         }
-
+        
     }
     
     bool isAVLBSTree() const
@@ -881,10 +898,16 @@ public:
     }
     
     
-    static BTNode<T> * search(BTNode<T> *root, const T rootV, std::function<void (T)> func = [](T n){ cout << n << "  ";})
+    static BTNode<T> * search(BTNode<T> *root, const T rootV, std::function<void (T)> func = [](T n){ cout << n << "  ";}, std::stack<BTNode<T> *> *&&stack = nullptr)
     {
         if (root)
         {
+            
+            if (stack)
+            {
+                stack->push(root);
+            }
+            
             func(root->mValue);
             if (root->mValue == rootV)
             {
@@ -984,29 +1007,29 @@ public:
     
     //=================================================
     // 创建平衡二叉查找树
-
-//    static BTNode<T> *buildAVLBTNode(T *treelist, int listSize, std::function<bool (const T rootV,const T insertValue)> compareFunc = [](const T rootV,const T insertValue)->bool{
-//        return rootV > insertValue;
-//    })
-//    {
-//        if (treelist == nullptr || listSize <= 0)
-//        {
-//            return nullptr;
-//        }
-//        T rtv = *treelist;
-//        BTNode<T> *root = new BTNode(rtv);
-//        int index = 1;
-//        std::function<bool (const T rootV,const T insertValue)>  comFunc = compareFunc;
-//
-//        do {
-//
-//            T value = *(treelist + index);
-//            BTNode::insertNode(root, value, comFunc);
-//            index++;
-//        } while (index < listSize);
-//
-//        return root;
-//    }
+    
+    //    static BTNode<T> *buildAVLBTNode(T *treelist, int listSize, std::function<bool (const T rootV,const T insertValue)> compareFunc = [](const T rootV,const T insertValue)->bool{
+    //        return rootV > insertValue;
+    //    })
+    //    {
+    //        if (treelist == nullptr || listSize <= 0)
+    //        {
+    //            return nullptr;
+    //        }
+    //        T rtv = *treelist;
+    //        BTNode<T> *root = new BTNode(rtv);
+    //        int index = 1;
+    //        std::function<bool (const T rootV,const T insertValue)>  comFunc = compareFunc;
+    //
+    //        do {
+    //
+    //            T value = *(treelist + index);
+    //            BTNode::insertNode(root, value, comFunc);
+    //            index++;
+    //        } while (index < listSize);
+    //
+    //        return root;
+    //    }
     
     
     static void singleRotateLL(BTNode<T> *&root)
@@ -1057,28 +1080,126 @@ public:
         }
     }
     
-    static BTNode<T> *buildAVLTree(std::vector<T> vec, std::function<bool (const T rootV,const T insertValue)> compareFunc = [](const T rootV,const T insertValue)->bool{
+    static BTNode<T> *buildAVLTree(T *varray, int size, std::function<bool (const T rootV,const T insertValue)> compareFunc = [](const T rootV,const T insertValue)->bool{
         return rootV > insertValue;
+    }, std::function<bool (T)> nodeFunc = [](T value)->bool {
+        return value > 0;
     })
     {
-        if (treelist == nullptr || listSize <= 0)
+        if (varray)
+        {
+            std::vector<T> vector;
+            for(int i = 0; i < size; i++)
+            {
+                vector.push_back(*(varray + i));
+            }
+            return BTNode::buildAVLTree(vector, compareFunc, nodeFunc);
+        }
+        return nullptr;
+    }
+    
+    
+    static BTNode<T> *buildAVLTree(std::vector<T> vec, std::function<bool (const T rootV,const T insertValue)> compareFunc = [](const T rootV,const T insertValue)->bool{
+        return rootV > insertValue;
+    }, std::function<bool (T)> nodeFunc = [](T value)->bool {
+        return value > 0;
+    })
+    {
+        int listsize = (int)vec.size();
+        if (listsize == 0)
         {
             return nullptr;
         }
-        T rtv = *treelist;
+        
+        T rtv = vec[0];
+        
+        if (!nodeFunc(rtv))
+        {
+            return nullptr;
+        }
         BTNode<T> *root = new BTNode(rtv);
         int index = 1;
-        std::function<bool (const T rootV,const T insertValue)>  comFunc = compareFunc;
+        
+//        std::function<bool (const T rootV,const T insertValue)>  comFunc = compareFunc;
         
         do {
             
-            T value = *(treelist + index);
-            BTNode::insertNode(root, value, comFunc);
+            T value = vec[index];
+            if (nodeFunc(value))
+            {
+                BTNode::insertAVLNode(root, value, compareFunc);
+            }
             index++;
-        } while (index < listSize);
+            
+            root->printTreeLikeTree();
+        } while (index < listsize);
         
         return root;
     }
+    
+    
+    
+    static void insertAVLNode(BTNode<T> *&root,const T value, std::function<bool (const T rootV,const T insertValue)> compareFunc = [](const T rootV,const T insertValue)->bool{
+        return insertValue < rootV;
+    }, std::function<bool (T)> nodeFunc = [](T value)->bool {
+        return value > 0;
+    })
+    {
+        
+        if(!nodeFunc(value))
+        {
+            return;
+        }
+        
+        if (root == nullptr)
+        {
+            root = new BTNode(value);
+        }
+        else
+        {
+            T rv = root->mValue;
+            bool isLittle = compareFunc(rv, value);
+            if (isLittle)
+            {
+                BTNode::insertNode(root->mLeft, value, compareFunc);
+                
+                if (heightOfTree(root->mLeft) - heightOfTree(root->mRight) >= 2)
+                {
+                    //
+                    if (compareFunc(root->mLeft->mValue, value))
+                    {
+                        singleRotateLL(root);
+                    }
+                    else
+                    {
+                        doublerotateLR(root);
+                    }
+                }
+                else
+                {
+                    // do nothing
+                }
+            }
+            else
+            {
+                BTNode::insertNode(root->mRight, value, compareFunc);
+                
+                if (heightOfTree(root->mRight) - heightOfTree(root->mLeft) >= 2)
+                {
+                    if (!compareFunc(root->mRight->mValue, value))
+                    {
+                        singleRotateRR(root);
+                    }
+                    else
+                    {
+                        doublerotateRL(root);
+                    }
+                }
+            }
+        }
+        
+    }
+    
     
     
     
