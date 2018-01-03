@@ -234,13 +234,23 @@ int main()
     BTNode<int>::insertAVLNode(root, 4);
     root->printTreeLikeTree();
     
+    BTNode<int>::deleteNode(root, 7);
+    root->printTreeLikeTree();
+    
+    
     BTNode<int>::insertAVLNode(root, 5);
     root->printTreeLikeTree();
     
     BTNode<int>::insertAVLNode(root, 3);
     root->printTreeLikeTree();
     
+    BTNode<int>::deleteNode(root, 4);
+    root->printTreeLikeTree();
+    
     BTNode<int>::insertAVLNode(root, 1);
+    root->printTreeLikeTree();
+    
+    BTNode<int>::deleteNode(root, 5);
     root->printTreeLikeTree();
     
     BTNode<int>::insertAVLNode(root, 6);
@@ -252,9 +262,13 @@ int main()
     BTNode<int>::insertAVLNode(root, 2);
     root->printTreeLikeTree();
     
+    BTNode<int>::deleteNode(root, 9);
+    root->printTreeLikeTree();
+    
     BTNode<int>::insertAVLNode(root, 12);
     root->printTreeLikeTree();
     
+    BTNode<int>::deleteNode(root, 6);
     root->printTreeLikeTree();
     return 0;
 }

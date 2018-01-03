@@ -1161,7 +1161,7 @@ public:
             bool isLittle = compareFunc(rv, value);
             if (isLittle)
             {
-                BTNode::insertNode(root->mLeft, value, compareFunc);
+                BTNode::insertAVLNode(root->mLeft, value, compareFunc, nodeFunc);
                 
                 if (heightOfTree(root->mLeft) - heightOfTree(root->mRight) >= 2)
                 {
@@ -1182,7 +1182,7 @@ public:
             }
             else
             {
-                BTNode::insertNode(root->mRight, value, compareFunc);
+                BTNode::insertAVLNode(root->mRight, value, compareFunc);
                 
                 if (heightOfTree(root->mRight) - heightOfTree(root->mLeft) >= 2)
                 {
@@ -1199,6 +1199,101 @@ public:
         }
         
     }
+    
+    
+    
+    static void deleteAVLNode(BTNode<T> *&root,const T value, std::function<int (const T rootV,const T insertValue)> compareFunc = [](const T rootV,const T insertValue)->bool{
+        if ( insertValue < rootV) return -1;
+        else if (insertValue > rootV) return 1;
+        else return 0;
+    }, std::function<bool (T)> nodeFunc = [](T value)->bool {
+        return value > 0;
+    })
+    {
+        
+        if(!nodeFunc(value))
+        {
+            return;
+        }
+        
+        if (root == nullptr)
+        {
+            return;
+        }
+        else
+        {
+            T rv = root->mValue;
+            int compare = compareFunc(rv, value) < 0;
+            if (compare < 0)
+            {
+                BTNode::deleteAVLNode(root->mLeft, value, compareFunc, nodeFunc);
+                
+                if (heightOfTree(root->mLeft) - heightOfTree(root->mRight) >= 2)
+                {
+                    if (compareFunc(root->mLeft->mValue, value))
+                    {
+                        singleRotateLL(root);
+                    }
+                    else
+                    {
+                        doublerotateLR(root);
+                    }
+                }
+                else
+                {
+                    // do nothing
+                }
+            }
+            else if (compare > 0)
+            {
+                BTNode::deleteAVLNode(root->mRight, value, compareFunc);
+                
+                if (heightOfTree(root->mRight) - heightOfTree(root->mLeft) >= 2)
+                {
+                    if (!compareFunc(root->mRight->mValue, value))
+                    {
+                        singleRotateRR(root);
+                    }
+                    else
+                    {
+                        doublerotateRL(root);
+                    }
+                }
+            }
+            else
+            {
+                if (root->mLeft == nullptr)
+                {
+                    // 左子树为空
+                    BTNode<T> *temp = root;
+                    root = root->mRight;
+                    delete temp;
+                    temp = nullptr;
+                }
+                else if (root->mRight == nullptr)
+                {
+                    BTNode<T> *temp = root;
+                    root = root->mLeft;
+                    delete temp;
+                    temp = nullptr;
+                }
+                else
+                {
+                    // 查找后续
+                    BTNode<T> *successor = root->searchSuccessor();
+                    T temp = successor->mValue;
+                    //删除后继结点
+                    root->mValue = temp;
+                    
+                    BTNode::deleteAVLNode(root->mRight, temp);
+                    
+                }
+            }
+        }
+        
+    }
+    
+    
     
     
     
