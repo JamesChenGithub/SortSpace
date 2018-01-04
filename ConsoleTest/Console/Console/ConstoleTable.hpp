@@ -176,7 +176,7 @@ public:
     
     
     
-    void game2048Start(std::function<T (int i)> func, std::function<std::string (T)> toStrFunc, std::function<T (bool)> genFunc, std::function<bool (T)> validFunc)
+    void game2048Start(std::function<T (int i)> func, std::function<std::string (T)> toStrFunc, std::function<T (bool)> genFunc, std::function<bool (T)> validFunc, std::function<void (T &, T&)> mergeFunc)
     {
         initGame2048(func);
         
@@ -213,7 +213,7 @@ public:
             };
             
             
-            bool isOver = randValue((isFirst ? 4 : 1), validFunc, genFunc);
+            bool isOver = randValue((isFirst ? 4 : 1), validFunc, genFunc, toStrFunc);
             isFirst = false;
             if (isOver)
             {
@@ -228,11 +228,12 @@ public:
             char c = 0;
             do
             {
-                c = getchar();
-                if (handleGame(c))
+                c = getc(stdin);
+                if (handleGame(c, validFunc, mergeFunc, gameShow))
                 {
                     break;
                 }
+                getc(stdin);
                 
             }while(true);
             
@@ -247,11 +248,51 @@ public:
     
 private:
     
-    bool handleGame(char c)
+    bool handleGame(char c, std::function<bool (T)> validFunc, std::function<void (T &, T&)> mergeFunc, std::function<void (T)> gameShow)
     {
         if (c == 'a')
         {
             // 左
+            for (int i = 0; i < tableRow; i++)
+            {
+                int fromIndex = 0;
+                bool findfirst = false;
+    
+                for (int j = 0; j < tableColumn; j++)
+                {
+                    int index =  i * tableColumn + j;
+                    T v = *(tableContent + index);
+                    if (validFunc(v))
+                    {
+                        if (findfirst)
+                        {
+                            mergeFunc(*(tableContent + fromIndex), *(tableContent + fromIndex));
+                            findfirst = 0;
+                            findfirst = false;
+                            
+                            printGame(gameShow);
+                        }
+                        else
+                        {
+                            fromIndex = index;
+                            findfirst = true;
+                        }
+                    }
+                }
+            }
+            
+            
+            for (int i = 0; i < tableRow; i++)
+            {
+                for (int j = 1; j < tableColumn; j++)
+                {
+                    int index =  i * tableColumn + j;
+                    mergeFunc(*(tableContent + index - 1), *(tableContent + index));
+                }
+            }
+            
+             printGame(gameShow);
+            
             return true;
         }
         else if (c == 'w')
@@ -273,7 +314,7 @@ private:
         return false;
     }
     
-    bool randValue(int count, std::function<bool (T)> validFunc, std::function<T (bool)> genFunc)
+    bool randValue(int count, std::function<bool (T)> validFunc, std::function<T (bool)> genFunc, std::function<std::string (T)> toStrFunc)
     {
         int i = count;
         std::vector<int> empty;
@@ -283,19 +324,23 @@ private:
         {
             empty.clear();
             getEmptySpace(empty, validFunc);
-            
+            std::cout << "空的格有：" << std::endl;
+            std::for_each(empty.begin(), empty.end(), [&](int i){
+                std::cout << "[" << i / tableColumn << "][" <<  i % tableColumn << "]" << "    ";
+            });
             int size = (int)empty.size();
             
             if(size > 0)
             {
-                int randIndex = (int)abs(rand()%size);
-                
+                int randIndex = empty[(int)abs(rand()%size)];
                 bool isTw0 = abs(rand()%3);
                 T value = genFunc(isTw0);
+                std::cout << std::endl <<"在：" << "[" << randIndex / tableColumn << "][" <<  randIndex % tableColumn << "]生成:"<< toStrFunc(value) << std::endl;
                 *(tableContent + randIndex) = value;
                 i--;
             }
-            else{
+            else
+            {
                 isOver = true;
                 break;
             }

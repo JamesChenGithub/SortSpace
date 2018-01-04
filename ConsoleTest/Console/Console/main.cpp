@@ -72,6 +72,9 @@ int main()
         return is2 ? 2 : 4;
     }, [](int v)->bool{
         return v > 0;
+    }, [](int &a, int &b){
+        a = a + b;
+        b = 0;
     });
    
     return 0;
