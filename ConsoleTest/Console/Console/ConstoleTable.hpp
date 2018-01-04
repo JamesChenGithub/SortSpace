@@ -143,20 +143,37 @@ public:
     void initGame2048(std::function<T (int i)> func, int row = 4, int col = 4)
     {
         resizeTable(row, col, func);
-        system("clear");
         gameScore = 0;
     }
     
     
-    void printGame(bool needclear = true) const
+    void printGame(std::function<void (T)> gameShow, bool needclear = true) const
     {
         if (needclear)
         {
-            system("clear");
+//            system("clear");
         }
         std::cout << "当前得分：" << gameScore << std::endl;
-        drawTable();
+        drawTable(gameShow);
     }
+    
+    int maxStrWidht(std::function<std::string (T)> toStrFunc)
+    {
+        int maxlen = 0;
+        for (int i = 0; i < tableSize; i++)
+        {
+            T ov = *(tableContent + i);
+            std::string str = toStrFunc(ov);
+            int strlen = (int)str.length();
+            if (strlen > maxlen)
+            {
+                maxlen = strlen;
+            }
+        }
+        
+        return maxlen;
+    }
+    
     
     
     void game2048Start(std::function<T (int i)> func, std::function<std::string (T)> toStrFunc, std::function<T (bool)> genFunc, std::function<bool (T)> validFunc)
@@ -166,8 +183,17 @@ public:
         bool stop = true;
         bool isFirst = true;
         
+        int cellWidth = tableRowMargin * kSpaceSize;
+        
+        
+        
         do
         {
+            if (maxStrWidht(toStrFunc) > cellWidth)
+            {
+                setmargin(tableRowMargin + 1, tableColumnMargin + 1);
+            }
+            
             std::function<void (T)> gameShow = [=](int i){
                 
                 std::string str = toStrFunc(i);
@@ -187,11 +213,17 @@ public:
             };
             
             
-            randValue(isFirst ? 4 : 1,validFunc, genFunc);
-            isFirst = true;
+            bool isOver = randValue((isFirst ? 4 : 1), validFunc, genFunc);
+            isFirst = false;
+            if (isOver)
+            {
+                std::cout << "=*=*=*=*=*=*游戏结束=*=*=*=*=*=*" << std::endl;
+                printGame(gameShow);
+                break;
+            }
             
             
-            printGame();
+            printGame(gameShow);
             // 等用户按键
             char c = 0;
             do
@@ -204,7 +236,7 @@ public:
                 
             }while(true);
             
-            printGame();
+            printGame(gameShow);
             
         }while(stop);
         
@@ -241,24 +273,34 @@ private:
         return false;
     }
     
-    void randValue(int count, std::function<bool (T)> validFunc, std::function<T (bool)> genFunc)
+    bool randValue(int count, std::function<bool (T)> validFunc, std::function<T (bool)> genFunc)
     {
         int i = count;
         std::vector<int> empty;
         srand( (unsigned)time( NULL ) );
+        bool isOver = false;
         while(i > 0)
         {
             empty.clear();
             getEmptySpace(empty, validFunc);
             
             int size = (int)empty.size();
-            int randIndex = (int)abs(rand()%size);
             
-            bool isTw0 = abs(rand()%2);
-            T value = genFunc(isTw0);
-            *(tableContent + randIndex) = value;
-            i--;
+            if(size > 0)
+            {
+                int randIndex = (int)abs(rand()%size);
+                
+                bool isTw0 = abs(rand()%3);
+                T value = genFunc(isTw0);
+                *(tableContent + randIndex) = value;
+                i--;
+            }
+            else{
+                isOver = true;
+                break;
+            }
         }
+        return isOver;
         
     }
     
@@ -266,7 +308,7 @@ private:
     {
         for (int i = 0; i < tableSize; i++)
         {
-            T ov = *(tableContent + index);
+            T ov = *(tableContent + i);
             bool isV = validFunc(ov);
             if (!isV)
             {
