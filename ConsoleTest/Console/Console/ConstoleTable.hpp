@@ -154,7 +154,8 @@ public:
         {
             //            system("clear");
         }
-        std::cout << "当前得分：" << toStrFunc(gameScore) << std::endl;
+        std::string str = toStrFunc(gameScore);
+        std::cout << "当前得分：" << (str.length() > 0 ? str : "0") << std::endl;
         drawTable(gameShow);
     }
     
@@ -289,7 +290,6 @@ private:
                                 {
                                     fromIndex = index;
                                     findfirst = true;
-                                    j--;
                                 }
                                 if (print)
                                     printGame(gameShow, toStrFunc);
@@ -372,7 +372,6 @@ private:
                                 {
                                     fromIndex = index;
                                     findfirst = true;
-                                    j--;
                                 }
                                 if (print)
                                     printGame(gameShow, toStrFunc);
@@ -455,7 +454,6 @@ private:
                                 {
                                     fromIndex = index;
                                     findfirst = true;
-                                    j++;
                                 }
                                 if (print)
                                     printGame(gameShow, toStrFunc);
@@ -621,8 +619,8 @@ private:
                 int randIndex = empty[(int)abs(rand()%size)];
                 bool isTw0 = abs(rand()%3);
                 T value = genFunc(isTw0);
-                if (printlog)
-                    std::cout << std::endl <<"在：" << "[" << randIndex / tableColumn << "][" <<  randIndex % tableColumn << "]生成:"<< toStrFunc(value) << std::endl;
+                
+                std::cout << std::endl <<"在：" << "[" << randIndex / tableColumn << "][" <<  randIndex % tableColumn << "]生成:"<< toStrFunc(value) << std::endl;
                 *(tableContent + randIndex) = value;
                 i--;
             }
