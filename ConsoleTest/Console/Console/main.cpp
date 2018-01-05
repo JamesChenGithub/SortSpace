@@ -62,6 +62,8 @@ int main()
     ConsoleTable<int> game;
     game.game2048Start([](int i)->int{
         return 0;
+    }, []()->int{
+        return 0;
     }, [](int v)->std::string{
         if (v == 0)
         {
@@ -72,9 +74,24 @@ int main()
         return is2 ? 2 : 4;
     }, [](int v)->bool{
         return v > 0;
-    }, [](int &a, int &b){
-        a = a + b;
-        b = 0;
+    }, [](int &a, int &b, int& score, bool isScore)->bool{
+        if(isScore)
+        {
+            if (a == b)
+            {
+                a = a + b;
+                score += b;
+                b = 0;
+                return true;
+            }
+            return false;
+        }
+        else
+        {
+            a = b;
+            b = 0;
+            return true;
+        }
     });
    
     return 0;

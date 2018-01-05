@@ -26,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SimpleTreeSpace/SimpleTreeSpace/main.cpp"
-            timestampString = "536766656.134556"
+            timestampString = "536812410.463893"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "272"
@@ -42,7 +42,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SimpleTreeSpace/SimpleTreeSpace/main.cpp"
-            timestampString = "536766656.134627"
+            timestampString = "536812410.463972"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "268"
@@ -58,7 +58,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SimpleTreeSpace/SimpleTreeSpace/main.cpp"
-            timestampString = "536766656.134674"
+            timestampString = "536812410.464058"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "234"
@@ -74,7 +74,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SimpleTreeSpace/SimpleTreeSpace/main.cpp"
-            timestampString = "536766656.134715"
+            timestampString = "536812410.464134"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "253"
@@ -90,7 +90,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SimpleTreeSpace/SimpleTreeSpace/main.cpp"
-            timestampString = "536766656.134753"
+            timestampString = "536812410.464195"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "262"
@@ -106,12 +106,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ConsoleTest/Console/Console/ConstoleTable.hpp"
-            timestampString = "536766950.835874"
+            timestampString = "536813556.818114"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "273"
-            endingLineNumber = "273"
-            landmarkName = "handleGame(char c, std::function&lt;bool (T)&gt; validFunc, std::function&lt;void (T &amp;, T&amp;)&gt; mergeFunc, std::function&lt;void (T)&gt; gameShow)"
+            startingLineNumber = "333"
+            endingLineNumber = "333"
+            landmarkName = "handleGame(char c, std::function&lt;bool (T)&gt; validFunc, std::function&lt;std::string (T)&gt; toStrFunc, std::function&lt;bool (T &amp;, T&amp;, T&amp;, bool)&gt; mergeFunc, std::function&lt;void (T)&gt; gameShow, bool print = true)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -122,12 +122,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ConsoleTest/Console/Console/ConstoleTable.hpp"
-            timestampString = "536766953.052934"
+            timestampString = "536813556.818434"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "285"
-            endingLineNumber = "285"
-            landmarkName = "handleGame(char c, std::function&lt;bool (T)&gt; validFunc, std::function&lt;void (T &amp;, T&amp;)&gt; mergeFunc, std::function&lt;void (T)&gt; gameShow)"
+            startingLineNumber = "420"
+            endingLineNumber = "420"
+            landmarkName = "handleGame(char c, std::function&lt;bool (T)&gt; validFunc, std::function&lt;std::string (T)&gt; toStrFunc, std::function&lt;bool (T &amp;, T&amp;, T&amp;, bool)&gt; mergeFunc, std::function&lt;void (T)&gt; gameShow, bool print = true)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ConsoleTest/Console/Console/ConstoleTable.hpp"
+            timestampString = "536813556.818641"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "429"
+            endingLineNumber = "429"
+            landmarkName = "handleGame(char c, std::function&lt;bool (T)&gt; validFunc, std::function&lt;std::string (T)&gt; toStrFunc, std::function&lt;bool (T &amp;, T&amp;, T&amp;, bool)&gt; mergeFunc, std::function&lt;void (T)&gt; gameShow, bool print = true)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ConsoleTest/Console/Console/ConstoleTable.hpp"
+            timestampString = "536813556.81897"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "465"
+            endingLineNumber = "465"
+            landmarkName = "handleGame(char c, std::function&lt;bool (T)&gt; validFunc, std::function&lt;std::string (T)&gt; toStrFunc, std::function&lt;bool (T &amp;, T&amp;, T&amp;, bool)&gt; mergeFunc, std::function&lt;void (T)&gt; gameShow, bool print = true)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

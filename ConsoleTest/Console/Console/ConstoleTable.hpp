@@ -51,7 +51,7 @@ private:
     unsigned int kMaxLenth = 2;
     
 private:
-    int gameScore = 0;
+    T gameScore = 0;
     
     
     
@@ -140,20 +140,20 @@ public:
     }
     
 public:
-    void initGame2048(std::function<T (int i)> func, int row = 4, int col = 4)
+    void initGame2048(std::function<T (int i)> func, std::function<T ()> initScore,int row = 4, int col = 4)
     {
         resizeTable(row, col, func);
-        gameScore = 0;
+        gameScore = initScore();
     }
     
     
-    void printGame(std::function<void (T)> gameShow, bool needclear = true) const
+    void printGame(std::function<void (T)> gameShow, std::function<std::string (T)> toStrFunc, bool needclear = true) const
     {
         if (needclear)
         {
-//            system("clear");
+            //            system("clear");
         }
-        std::cout << "当前得分：" << gameScore << std::endl;
+        std::cout << "当前得分：" << toStrFunc(gameScore) << std::endl;
         drawTable(gameShow);
     }
     
@@ -176,9 +176,9 @@ public:
     
     
     
-    void game2048Start(std::function<T (int i)> func, std::function<std::string (T)> toStrFunc, std::function<T (bool)> genFunc, std::function<bool (T)> validFunc, std::function<void (T &, T&)> mergeFunc)
+    void game2048Start(std::function<T (int i)> func, std::function<T ()> initScore, std::function<std::string (T)> toStrFunc, std::function<T (bool)> genFunc, std::function<bool (T)> validFunc, std::function<bool (T &, T&, T&, bool)> mergeFunc)
     {
-        initGame2048(func);
+        initGame2048(func, initScore);
         
         bool stop = true;
         bool isFirst = true;
@@ -189,6 +189,7 @@ public:
         
         do
         {
+            std::cout << "=*=*=*=*=*=*=*=*=*=*=*=*新一轮操作=*=*=*=*=*=*=*=*=*=*=*=*" << std::endl;
             if (maxStrWidht(toStrFunc) > cellWidth)
             {
                 setmargin(tableRowMargin + 1, tableColumnMargin + 1);
@@ -218,26 +219,29 @@ public:
             if (isOver)
             {
                 std::cout << "=*=*=*=*=*=*游戏结束=*=*=*=*=*=*" << std::endl;
-                printGame(gameShow);
+                printGame(gameShow, toStrFunc);
                 break;
             }
             
             
-            printGame(gameShow);
+            printGame(gameShow, toStrFunc);
             // 等用户按键
             char c = 0;
             do
             {
-                c = getc(stdin);
-                if (handleGame(c, validFunc, mergeFunc, gameShow))
+                std::cout << "请输入 a(左),w(上),d(右),s(下)建行操作：";
+                std::string str;
+                getline(std::cin, str);
+                const char *cstr = str.c_str();
+                c = *cstr;
+                if (handleGame(c, validFunc, toStrFunc, mergeFunc, gameShow))
                 {
                     break;
                 }
-                getc(stdin);
                 
             }while(true);
             
-            printGame(gameShow);
+            printGame(gameShow, toStrFunc);
             
         }while(stop);
         
@@ -248,66 +252,325 @@ public:
     
 private:
     
-    bool handleGame(char c, std::function<bool (T)> validFunc, std::function<void (T &, T&)> mergeFunc, std::function<void (T)> gameShow)
+    bool handleGame(char c, std::function<bool (T)> validFunc, std::function<std::string (T)> toStrFunc, std::function<bool (T &, T&, T&, bool)> mergeFunc, std::function<void (T)> gameShow, bool print = true)
     {
         if (c == 'a')
         {
             // 左
             for (int i = 0; i < tableRow; i++)
             {
-                int fromIndex = 0;
-                bool findfirst = false;
-    
-                for (int j = 0; j < tableColumn; j++)
+                // 合并
                 {
-                    int index =  i * tableColumn + j;
-                    T v = *(tableContent + index);
-                    if (validFunc(v))
+                    int fromIndex = 0;
+                    bool findfirst = false;
+                    
+                    for (int j = 0; j < tableColumn; j++)
                     {
-                        if (findfirst)
+                        int index =  i * tableColumn + j;
+                        T v = *(tableContent + index);
+                        if (validFunc(v))
                         {
-                            mergeFunc(*(tableContent + fromIndex), *(tableContent + fromIndex));
-                            findfirst = 0;
-                            findfirst = false;
-                            
-                            printGame(gameShow);
+                            if (findfirst)
+                            {
+                                bool succ = mergeFunc(*(tableContent + fromIndex), *(tableContent + index), gameScore, true);
+                                if (succ)
+                                {
+                                    fromIndex = 0;
+                                    findfirst = false;
+                                }
+                                else
+                                {
+                                    fromIndex = index;
+                                    findfirst = true;
+                                    j--;
+                                }
+                                if (print)
+                                    printGame(gameShow, toStrFunc);
+                            }
+                            else
+                            {
+                                fromIndex = index;
+                                findfirst = true;
+                            }
+                        }
+                    }
+                }
+                
+                // 平移
+                {
+                    int fromIndex = -1;
+                    bool findFirst = false;
+                    for (int j = 0; j < tableColumn; j++)
+                    {
+                        int index =  i * tableColumn + j;
+                        T v = *(tableContent + index);
+                        
+                        if (validFunc(v))
+                        {
+                            if (findFirst)
+                            {
+                                T temp;
+                                mergeFunc(*(tableContent + fromIndex), *(tableContent + index), temp, false);
+                                j = fromIndex;
+                                fromIndex = 0;
+                                findFirst = false;
+                                if (print)
+                                    printGame(gameShow, toStrFunc);
+                            }
                         }
                         else
                         {
-                            fromIndex = index;
-                            findfirst = true;
+                            if(!findFirst)
+                            {
+                                fromIndex = index;
+                                findFirst = true;
+                            }
                         }
                     }
                 }
             }
-            
-            
-            for (int i = 0; i < tableRow; i++)
-            {
-                for (int j = 1; j < tableColumn; j++)
-                {
-                    int index =  i * tableColumn + j;
-                    mergeFunc(*(tableContent + index - 1), *(tableContent + index));
-                }
-            }
-            
-             printGame(gameShow);
+            if (print)
+                printGame(gameShow, toStrFunc);
             
             return true;
         }
         else if (c == 'w')
         {
             // 上
+            for (int i = 0; i < tableColumn; i++)
+            {
+                // 合并
+                {
+                    int fromIndex = 0;
+                    bool findfirst = false;
+                    
+                    for (int j = 0; j < tableRow; j++)
+                    {
+                        int index =  j * tableColumn + i;
+                        T v = *(tableContent + index);
+                        if (validFunc(v))
+                        {
+                            if (findfirst)
+                            {
+                                bool succ = mergeFunc(*(tableContent + fromIndex), *(tableContent + index), gameScore, true);
+                                if (succ)
+                                {
+                                    fromIndex = 0;
+                                    findfirst = false;
+                                }
+                                else
+                                {
+                                    fromIndex = index;
+                                    findfirst = true;
+                                    j--;
+                                }
+                                if (print)
+                                    printGame(gameShow, toStrFunc);
+                            }
+                            else
+                            {
+                                fromIndex = index;
+                                findfirst = true;
+                            }
+                        }
+                    }
+                }
+                
+                // 平移
+                {
+                    int fromIndex = -1;
+                    bool findFirst = false;
+                    for (int j = 0; j < tableRow; j++)
+                    {
+                        int index =  j * tableColumn + i;
+                        T v = *(tableContent + index);
+                        
+                        if (validFunc(v))
+                        {
+                            if (findFirst)
+                            {
+                                T temp;
+                                mergeFunc(*(tableContent + fromIndex), *(tableContent + index), temp, false);
+                                j = fromIndex;
+                                fromIndex = 0;
+                                findFirst = false;
+                                if (print)
+                                    printGame(gameShow, toStrFunc);
+                            }
+                        }
+                        else
+                        {
+                            if(!findFirst)
+                            {
+                                fromIndex = index;
+                                findFirst = true;
+                            }
+                        }
+                    }
+                }
+            }
+            if (print)
+                printGame(gameShow, toStrFunc);
+            
             return true;
         }
         else if (c == 'd')
         {
             // 右
+            for (int i = 0; i < tableRow; i++)
+            {
+                // 合并
+                {
+                    int fromIndex = 0;
+                    bool findfirst = false;
+                    
+                    for (int j = tableColumn - 1; j >=0; j--)
+                    {
+                        int index =  i * tableColumn + j;
+                        T v = *(tableContent + index);
+                        if (validFunc(v))
+                        {
+                            if (findfirst)
+                            {
+                                bool succ = mergeFunc(*(tableContent + fromIndex), *(tableContent + index), gameScore, true);
+                                if (succ)
+                                {
+                                    fromIndex = 0;
+                                    findfirst = false;
+                                }
+                                else
+                                {
+                                    fromIndex = index;
+                                    findfirst = true;
+                                    j++;
+                                }
+                                if (print)
+                                    printGame(gameShow, toStrFunc);
+                            }
+                            else
+                            {
+                                fromIndex = index;
+                                findfirst = true;
+                            }
+                        }
+                    }
+                }
+                
+                // 平移
+                {
+                    int fromIndex = -1;
+                    bool findFirst = false;
+                    for (int j = tableColumn - 1; j >=0; j--)
+                    {
+                        int index =  i * tableColumn + j;
+                        T v = *(tableContent + index);
+                        
+                        if (validFunc(v))
+                        {
+                            if (findFirst)
+                            {
+                                T temp;
+                                mergeFunc(*(tableContent + fromIndex), *(tableContent + index), temp, false);
+                                j = fromIndex;
+                                fromIndex = 0;
+                                findFirst = false;
+                                if (print)
+                                    printGame(gameShow, toStrFunc);
+                            }
+                        }
+                        else
+                        {
+                            if(!findFirst)
+                            {
+                                fromIndex = index;
+                                findFirst = true;
+                            }
+                        }
+                    }
+                }
+            }
+            if (print)
+                printGame(gameShow, toStrFunc);
             return true;
         }
         else if (c == 's')
         {
             // 下
+            for (int i = 0; i < tableColumn; i++)
+            {
+                // 合并
+                {
+                    int fromIndex = 0;
+                    bool findfirst = false;
+                    
+                    for (int j = tableRow - 1; j >= 0; j++)
+                    {
+                        int index =  j * tableColumn + i;
+                        T v = *(tableContent + index);
+                        if (validFunc(v))
+                        {
+                            if (findfirst)
+                            {
+                                bool succ = mergeFunc(*(tableContent + fromIndex), *(tableContent + index), gameScore, true);
+                                if (succ)
+                                {
+                                    fromIndex = 0;
+                                    findfirst = false;
+                                }
+                                else
+                                {
+                                    fromIndex = index;
+                                    findfirst = true;
+                                    j--;
+                                }
+                                if (print)
+                                    printGame(gameShow, toStrFunc);
+                            }
+                            else
+                            {
+                                fromIndex = index;
+                                findfirst = true;
+                            }
+                        }
+                    }
+                }
+                
+                // 平移
+                {
+                    int fromIndex = -1;
+                    bool findFirst = false;
+                    for (int j = tableRow - 1; j >= 0; j++)
+                    {
+                        int index =  j * tableColumn + i;
+                        T v = *(tableContent + index);
+                        
+                        if (validFunc(v))
+                        {
+                            if (findFirst)
+                            {
+                                T temp;
+                                mergeFunc(*(tableContent + fromIndex), *(tableContent + index), temp, false);
+                                j = fromIndex;
+                                fromIndex = 0;
+                                findFirst = false;
+                                if (print)
+                                    printGame(gameShow, toStrFunc);
+                            }
+                        }
+                        else
+                        {
+                            if(!findFirst)
+                            {
+                                fromIndex = index;
+                                findFirst = true;
+                            }
+                        }
+                    }
+                }
+            }
+            if (print)
+                printGame(gameShow, toStrFunc);
+            
             return true;
         }
         
