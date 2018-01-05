@@ -38,7 +38,7 @@ public:
     {
         if (needclear)
         {
-            //            system("clear");
+            system("clear");
         }
         std::string str = toStrFunc(gameScore);
         std::cout << "当前得分：" << (str.length() > 0 ? str : "0") << std::endl;
