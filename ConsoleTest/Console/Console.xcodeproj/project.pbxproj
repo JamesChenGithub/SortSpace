@@ -23,6 +23,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		923FEB2C1FFF482300910DAA /* Game2048.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Game2048.hpp; sourceTree = "<group>"; };
 		9280C7D61FFDDB1C004ADB70 /* Console */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Console; sourceTree = BUILT_PRODUCTS_DIR; };
 		9280C7D91FFDDB1C004ADB70 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		9280C7E11FFE1D72004ADB70 /* ConstoleTable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ConstoleTable.hpp; sourceTree = "<group>"; };
@@ -60,6 +61,7 @@
 			children = (
 				9280C7D91FFDDB1C004ADB70 /* main.cpp */,
 				9280C7E11FFE1D72004ADB70 /* ConstoleTable.hpp */,
+				923FEB2C1FFF482300910DAA /* Game2048.hpp */,
 			);
 			path = Console;
 			sourceTree = "<group>";

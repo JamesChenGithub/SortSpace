@@ -5,6 +5,8 @@
 
 #include "ConstoleTable.hpp"
 
+#include "Game2048.hpp"
+
 int main()
 {
 
@@ -59,7 +61,7 @@ int main()
         printf("  %c", i);
     });
     
-    ConsoleTable<int> game;
+    Game2048<int> game;
     game.game2048Start([](int i)->int{
         return 0;
     }, []()->int{
