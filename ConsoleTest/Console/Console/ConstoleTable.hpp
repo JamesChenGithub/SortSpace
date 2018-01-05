@@ -14,6 +14,7 @@
 #include <functional>
 #include <string>
 #include <vector>
+#include <unistd.h>
 
 #ifndef IsMacOS
 #define IsMacOS 1
@@ -238,6 +239,10 @@ public:
                 {
                     break;
                 }
+                else
+                {
+                    usleep(1000000 * 2);
+                }
                 
             }while(true);
             
@@ -252,7 +257,7 @@ public:
     
 private:
     
-    bool handleGame(char c, std::function<bool (T)> validFunc, std::function<std::string (T)> toStrFunc, std::function<bool (T &, T&, T&, bool)> mergeFunc, std::function<void (T)> gameShow, bool print = true)
+    bool handleGame(char c, std::function<bool (T)> validFunc, std::function<std::string (T)> toStrFunc, std::function<bool (T &, T&, T&, bool)> mergeFunc, std::function<void (T)> gameShow, bool print = false)
     {
         if (c == 'a')
         {
@@ -266,6 +271,8 @@ private:
                     
                     for (int j = 0; j < tableColumn; j++)
                     {
+                        if (print)
+                            std::cout << "========>>>> 左合并" << std::endl;
                         int index =  i * tableColumn + j;
                         T v = *(tableContent + index);
                         if (validFunc(v))
@@ -302,6 +309,8 @@ private:
                     bool findFirst = false;
                     for (int j = 0; j < tableColumn; j++)
                     {
+                        if (print)
+                            std::cout << "========>>>> 左平移" << std::endl;
                         int index =  i * tableColumn + j;
                         T v = *(tableContent + index);
                         
@@ -311,9 +320,8 @@ private:
                             {
                                 T temp;
                                 mergeFunc(*(tableContent + fromIndex), *(tableContent + index), temp, false);
-                                j = fromIndex;
-                                fromIndex = 0;
-                                findFirst = false;
+                                fromIndex = index;
+                                findFirst = true;
                                 if (print)
                                     printGame(gameShow, toStrFunc);
                             }
@@ -346,6 +354,8 @@ private:
                     
                     for (int j = 0; j < tableRow; j++)
                     {
+                        if (print)
+                            std::cout << "========>>>> 上合并" << std::endl;
                         int index =  j * tableColumn + i;
                         T v = *(tableContent + index);
                         if (validFunc(v))
@@ -382,6 +392,8 @@ private:
                     bool findFirst = false;
                     for (int j = 0; j < tableRow; j++)
                     {
+                        if (print)
+                            std::cout << "========>>>> 上平移" << std::endl;
                         int index =  j * tableColumn + i;
                         T v = *(tableContent + index);
                         
@@ -391,9 +403,8 @@ private:
                             {
                                 T temp;
                                 mergeFunc(*(tableContent + fromIndex), *(tableContent + index), temp, false);
-                                j = fromIndex;
-                                fromIndex = 0;
-                                findFirst = false;
+                                fromIndex = index;
+                                findFirst = true;
                                 if (print)
                                     printGame(gameShow, toStrFunc);
                             }
@@ -421,6 +432,8 @@ private:
             {
                 // 合并
                 {
+                    if (print)
+                        std::cout << "========>>>> 右合并" << std::endl;
                     int fromIndex = 0;
                     bool findfirst = false;
                     
@@ -462,6 +475,8 @@ private:
                     bool findFirst = false;
                     for (int j = tableColumn - 1; j >=0; j--)
                     {
+                        if (print)
+                            std::cout << "========>>>> 右平移" << std::endl;
                         int index =  i * tableColumn + j;
                         T v = *(tableContent + index);
                         
@@ -471,9 +486,9 @@ private:
                             {
                                 T temp;
                                 mergeFunc(*(tableContent + fromIndex), *(tableContent + index), temp, false);
-                                j = fromIndex;
-                                fromIndex = 0;
-                                findFirst = false;
+                                
+                                fromIndex = index;
+                                findFirst = true;
                                 if (print)
                                     printGame(gameShow, toStrFunc);
                             }
@@ -503,8 +518,10 @@ private:
                     int fromIndex = 0;
                     bool findfirst = false;
                     
-                    for (int j = tableRow - 1; j >= 0; j++)
+                    for (int j = tableRow - 1; j >= 0; j--)
                     {
+                        if (print)
+                            std::cout << "========>>>> 下合并" << std::endl;
                         int index =  j * tableColumn + i;
                         T v = *(tableContent + index);
                         if (validFunc(v))
@@ -516,15 +533,16 @@ private:
                                 {
                                     fromIndex = 0;
                                     findfirst = false;
+                                    
+                                    if (print)
+                                        printGame(gameShow, toStrFunc);
                                 }
                                 else
                                 {
                                     fromIndex = index;
                                     findfirst = true;
-                                    j--;
                                 }
-                                if (print)
-                                    printGame(gameShow, toStrFunc);
+                                
                             }
                             else
                             {
@@ -534,13 +552,16 @@ private:
                         }
                     }
                 }
-                
+                if (print)
+                    printGame(gameShow, toStrFunc);
                 // 平移
                 {
                     int fromIndex = -1;
                     bool findFirst = false;
-                    for (int j = tableRow - 1; j >= 0; j++)
+                    for (int j = tableRow - 1; j >= 0; j--)
                     {
+                        if (print)
+                            std::cout << "========>>>> 下平移" << std::endl;
                         int index =  j * tableColumn + i;
                         T v = *(tableContent + index);
                         
@@ -550,9 +571,8 @@ private:
                             {
                                 T temp;
                                 mergeFunc(*(tableContent + fromIndex), *(tableContent + index), temp, false);
-                                j = fromIndex;
-                                fromIndex = 0;
-                                findFirst = false;
+                                fromIndex = index;
+                                findFirst = true;
                                 if (print)
                                     printGame(gameShow, toStrFunc);
                             }
@@ -577,7 +597,7 @@ private:
         return false;
     }
     
-    bool randValue(int count, std::function<bool (T)> validFunc, std::function<T (bool)> genFunc, std::function<std::string (T)> toStrFunc)
+    bool randValue(int count, std::function<bool (T)> validFunc, std::function<T (bool)> genFunc, std::function<std::string (T)> toStrFunc, bool printlog = false)
     {
         int i = count;
         std::vector<int> empty;
@@ -587,10 +607,13 @@ private:
         {
             empty.clear();
             getEmptySpace(empty, validFunc);
-            std::cout << "空的格有：" << std::endl;
-            std::for_each(empty.begin(), empty.end(), [&](int i){
-                std::cout << "[" << i / tableColumn << "][" <<  i % tableColumn << "]" << "    ";
-            });
+            if (printlog)
+            {
+                std::cout << "空的格有：" << std::endl;
+                std::for_each(empty.begin(), empty.end(), [&](int i){
+                    std::cout << "[" << i / tableColumn << "][" <<  i % tableColumn << "]" << "    ";
+                });
+            }
             int size = (int)empty.size();
             
             if(size > 0)
@@ -598,7 +621,8 @@ private:
                 int randIndex = empty[(int)abs(rand()%size)];
                 bool isTw0 = abs(rand()%3);
                 T value = genFunc(isTw0);
-                std::cout << std::endl <<"在：" << "[" << randIndex / tableColumn << "][" <<  randIndex % tableColumn << "]生成:"<< toStrFunc(value) << std::endl;
+                if (printlog)
+                    std::cout << std::endl <<"在：" << "[" << randIndex / tableColumn << "][" <<  randIndex % tableColumn << "]生成:"<< toStrFunc(value) << std::endl;
                 *(tableContent + randIndex) = value;
                 i--;
             }
