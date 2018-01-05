@@ -1,13 +1,13 @@
 //
-//  ConstoleTable.hpp
+//  ConsoleTable.hpp
 //  Console
 //
 //  Created by AlexiChen on 2018/1/4.
 //  Copyright © 2018年 AlexiChen. All rights reserved.
 //
 
-#ifndef ConstoleTable_hpp
-#define ConstoleTable_hpp
+#ifndef ConsoleTable_hpp
+#define ConsoleTable_hpp
 
 #include <stdio.h>
 #include <iostream>
@@ -127,6 +127,28 @@ public:
         
         drawCenter(func);
         drawBottom();
+        
+    }
+    
+    void drawTable2(std::function<std::string (T)> toStrFunc = [](T v)->std::string{
+        return std::to_string(v);
+    })
+    {
+        int maxSpce = tableRowMargin * kSpaceSize;
+       
+        drawTable([&](T value) {
+            std::string str = toStrFunc(value);
+            if (str.length() < maxSpce)
+            {
+                int count = (int)(maxSpce - str.length());
+                while(count > 0)
+                {
+                    count--;
+                    std::cout << " ";
+                }
+                std::cout << str;
+            }
+        });
         
     }
     
@@ -308,4 +330,4 @@ protected:
 
 
 
-#endif /* ConstoleTable_hpp */
+#endif /* ConsoleTable_hpp */

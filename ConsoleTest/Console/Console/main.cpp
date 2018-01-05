@@ -1,102 +1,130 @@
 #include <stdio.h>
-#include <string.h>
+
 
 #include <string>
+#include <unordered_set>
 
-#include "ConstoleTable.hpp"
+#include "ConsoleTable.hpp"
 
 #include "Game2048.hpp"
 
+#include "EightCell.h"
+
 int main()
 {
+    std::hash<std::string> h;
+    size_t n = h("Just");
+    std::cout << n << std::endl;
+    
+    n = h("Justa");
+    std::cout << n << std::endl;
+    
+    n = h("Justb");
+    std::cout << n << std::endl;
+    
+    
+    std::unordered_set<int, std::hash<int> > c0;
+    c0.insert(3);
+    std::cout << *c0.find(3) << std::endl;
+    
+    
+    TEightCell<int> cell;
+    cell.randomGame(2);
+    cell.reverse();
+//    cell.move(0);
+//    cell.move(1);
+//    cell.move(2);
+//    cell.move(3);
+    
+    
 
-    ConsoleTable<int> table;
-    table.drawTable([](int i){
-        printf("%-3d", i);
-    });
-    
-    table.resizeTable(3, 3,[](int i)->int{
-        if(i%3 == 0)
-        {
-            return 0;
-        }
-        else
-        {
-            return i;
-        }
-    });
-    
-    table.drawTable([](int i){
-        if (i == 0)
-        {
-            printf("   ");
-        }
-        else
-        {
-            printf("%-3d", i);
-        }
-        
-    });
-    
-    
-    
-    
-    ConsoleTable<int> table2(5,5);
-    table2.drawTable([](int i){
-        printf("%3d", i);
-    });
-    
-    ConsoleTable<char> tablec(5,5);
-    tablec.setmargin(2, 2);
-    tablec.drawTable([](char i){
-        printf("%6d", i);
-    });
-    tablec.resizeTable(4, 1, [](int i)->char{
-        return 'a'+i;
-        
-    });
-    
-    tablec.setmargin(1, 1);
-    tablec.drawTable([](char i){
-        printf("  %c", i);
-    });
-    
-    Game2048<int> game;
-    game.game2048Start([](int i)->int{
-        return 0;
-    }, []()->int{
-        return 0;
-    }, [](int v)->std::string{
-        if (v == 0)
-        {
-            return "";
-        }
-        return std::to_string(v);
-    }, [] (bool is2)->int {
-        return is2 ? 2 : 4;
-    }, [](int v)->bool{
-        return v > 0;
-    }, [](int &a, int &b, int& score, bool isScore)->bool{
-        if(isScore)
-        {
-            if (a == b)
-            {
-                a = a + b;
-                score += b;
-                b = 0;
-                return true;
-            }
-            return false;
-        }
-        else
-        {
-            a = b;
-            b = 0;
-            return true;
-        }
-    }, [](int a, int b)->bool{
-        return a == b;
-    });
+//    ConsoleTable<int> table;
+//    table.drawTable([](int i){
+//        printf("%-3d", i);
+//    });
+//
+//    table.resizeTable(3, 3,[](int i)->int{
+//        if(i%3 == 0)
+//        {
+//            return 0;
+//        }
+//        else
+//        {
+//            return i;
+//        }
+//    });
+//
+//    table.drawTable([](int i){
+//        if (i == 0)
+//        {
+//            printf("   ");
+//        }
+//        else
+//        {
+//            printf("%-3d", i);
+//        }
+//
+//    });
+//
+//
+//
+//
+//    ConsoleTable<int> table2(5,5);
+//    table2.drawTable([](int i){
+//        printf("%3d", i);
+//    });
+//
+//    ConsoleTable<char> tablec(5,5);
+//    tablec.setmargin(2, 2);
+//    tablec.drawTable([](char i){
+//        printf("%6d", i);
+//    });
+//    tablec.resizeTable(4, 1, [](int i)->char{
+//        return 'a'+i;
+//
+//    });
+//
+//    tablec.setmargin(1, 1);
+//    tablec.drawTable([](char i){
+//        printf("  %c", i);
+//    });
+//
+//    Game2048<int> game;
+//    game.game2048Start([](int i)->int{
+//        return 0;
+//    }, []()->int{
+//        return 0;
+//    }, [](int v)->std::string{
+//        if (v == 0)
+//        {
+//            return "";
+//        }
+//        return std::to_string(v);
+//    }, [] (bool is2)->int {
+//        return is2 ? 2 : 4;
+//    }, [](int v)->bool{
+//        return v > 0;
+//    }, [](int &a, int &b, int& score, bool isScore)->bool{
+//        if(isScore)
+//        {
+//            if (a == b)
+//            {
+//                a = a + b;
+//                score += b;
+//                b = 0;
+//                return true;
+//            }
+//            return false;
+//        }
+//        else
+//        {
+//            a = b;
+//            b = 0;
+//            return true;
+//        }
+//    }, [](int a, int b)->bool{
+//        return a == b;
+//    });
    
     return 0;
 }

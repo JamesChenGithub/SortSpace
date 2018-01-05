@@ -9,30 +9,27 @@
 #ifndef Game2048_h
 #define Game2048_h
 
-#include "ConstoleTable.hpp"
+#include "ConsoleTable.hpp"
 
 template <typename T>
-class Game2048:  ConsoleTable<T>
+class Game2048: public ConsoleTable<T>
 {
 protected:
     T gameScore = 0;
 public:
     
-    ~Game2048()
-    {
-    }
-    
-    Game2048():ConsoleTable<T>()
-    {
-    }
-    
-    Game2048(unsigned int row, unsigned int column, unsigned int rowm = 1, unsigned int colm = 1):ConsoleTable<T>(row, column, rowm, column){
-        
-    }
-    
-    
-    
-    
+//    ~Game2048()
+//    {
+//    }
+//    
+//    Game2048():ConsoleTable<T>()
+//    {
+//    }
+//    
+//    Game2048(unsigned int row, unsigned int column, unsigned int rowm = 1, unsigned int colm = 1):ConsoleTable<T>(row, column, rowm, column){
+//        
+//    }
+//    
     
     void printGame(std::function<void (T)> gameShow, std::function<std::string (T)> toStrFunc, bool needclear = true) const
     {
