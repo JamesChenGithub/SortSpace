@@ -176,9 +176,35 @@ public:
         return maxlen;
     }
     
+    bool isRealGameOver(std::function<bool (T, T)> equalFunc)
+    {
+        
+        // 水平检查
+        
+        for (int i = 0; i < tableRow - 1; i++)
+        {
+            for (int j = 0; j < tableColumn - 1; j++)
+            {
+                T hor1 = *(tableContent + (i * tableColumn + j));
+                T hor2 = *(tableContent + (i * tableColumn + j + 1));
+                if (equalFunc(hor1, hor2))
+                {
+                    return false;
+                }
+                
+                T ver2 = *(tableContent + ((i+1) * tableColumn + j));
+                if (equalFunc(hor1, ver2))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     
     
-    void game2048Start(std::function<T (int i)> func, std::function<T ()> initScore, std::function<std::string (T)> toStrFunc, std::function<T (bool)> genFunc, std::function<bool (T)> validFunc, std::function<bool (T &, T&, T&, bool)> mergeFunc)
+    
+    void game2048Start(std::function<T (int i)> func, std::function<T ()> initScore, std::function<std::string (T)> toStrFunc, std::function<T (bool)> genFunc, std::function<bool (T)> validFunc, std::function<bool (T &, T&, T&, bool)> mergeFunc, std::function<bool (T, T)> equalFunc)
     {
         initGame2048(func, initScore);
         
@@ -191,11 +217,7 @@ public:
         
         do
         {
-            std::cout << "=*=*=*=*=*=*=*=*=*=*=*=*新一轮操作=*=*=*=*=*=*=*=*=*=*=*=*" << std::endl;
-            if (maxStrWidht(toStrFunc) > cellWidth)
-            {
-                setmargin(tableRowMargin + 1, tableColumnMargin + 1);
-            }
+           
             
             std::function<void (T)> gameShow = [=](int i){
                 
@@ -220,11 +242,20 @@ public:
             isFirst = false;
             if (isOver)
             {
-                std::cout << "=*=*=*=*=*=*游戏结束=*=*=*=*=*=*" << std::endl;
-                printGame(gameShow, toStrFunc);
-                break;
+                bool isRealOver = isRealGameOver(equalFunc);
+                if (isRealOver)
+                {
+                    std::cout << "=*=*=*=*=*=*游戏结束=*=*=*=*=*=*" << std::endl;
+                    printGame(gameShow, toStrFunc);
+                    break;
+                }
             }
             
+            std::cout << "=*=*=*=*=*=*=*=*=*=*=*=*新一轮操作=*=*=*=*=*=*=*=*=*=*=*=*" << std::endl;
+            if (maxStrWidht(toStrFunc) >= cellWidth)
+            {
+                setmargin(tableRowMargin + 1, tableColumnMargin + 1);
+            }
             
             printGame(gameShow, toStrFunc);
             // 等用户按键
@@ -236,7 +267,7 @@ public:
                 getline(std::cin, str);
                 const char *cstr = str.c_str();
                 c = *cstr;
-                if (handleGame(c, validFunc, toStrFunc, mergeFunc, gameShow))
+                if (c >= 96 && handleGame(c, validFunc, toStrFunc, mergeFunc, gameShow))
                 {
                     break;
                 }
@@ -250,9 +281,6 @@ public:
             printGame(gameShow, toStrFunc);
             
         }while(stop);
-        
-        
-        
     }
     
     
@@ -320,8 +348,30 @@ private:
                             {
                                 T temp;
                                 mergeFunc(*(tableContent + fromIndex), *(tableContent + index), temp, false);
-                                fromIndex = index;
-                                findFirst = true;
+                                
+                                int col = fromIndex%tableColumn + 1;
+                                if (col < j)
+                                {
+                                    while (col < j)
+                                    {
+                                        int colindex =  i * tableColumn + col;
+                                        T v = *(tableContent + colindex);
+                                        col++;
+                                        if(!validFunc(v))
+                                        {
+                                            fromIndex = colindex;
+                                            findFirst = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    fromIndex = index;
+                                    findFirst = true;
+                                }
+                                
+                                
                                 if (print)
                                     printGame(gameShow, toStrFunc);
                             }
@@ -402,8 +452,30 @@ private:
                             {
                                 T temp;
                                 mergeFunc(*(tableContent + fromIndex), *(tableContent + index), temp, false);
-                                fromIndex = index;
-                                findFirst = true;
+                                
+                                
+                                int col = fromIndex/tableColumn + 1;
+                                if (col < j)
+                                {
+                                    while (col < j)
+                                    {
+                                        int colindex =  i * tableColumn + col;
+                                        T v = *(tableContent + colindex);
+                                        col++;
+                                        if(!validFunc(v))
+                                        {
+                                            fromIndex = colindex;
+                                            findFirst = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    fromIndex = index;
+                                    findFirst = true;
+                                }
+                                
                                 if (print)
                                     printGame(gameShow, toStrFunc);
                             }
@@ -485,8 +557,29 @@ private:
                                 T temp;
                                 mergeFunc(*(tableContent + fromIndex), *(tableContent + index), temp, false);
                                 
-                                fromIndex = index;
-                                findFirst = true;
+                                int col = fromIndex%tableColumn - 1;
+                                if (col > j)
+                                {
+                                    while (col > j)
+                                    {
+                                        int colindex =  i * tableColumn + col;
+                                        T v = *(tableContent + colindex);
+                                        col--;
+                                        if(!validFunc(v))
+                                        {
+                                            fromIndex = colindex;
+                                            findFirst = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    fromIndex = index;
+                                    findFirst = true;
+                                }
+                                
+                               
                                 if (print)
                                     printGame(gameShow, toStrFunc);
                             }
@@ -569,8 +662,27 @@ private:
                             {
                                 T temp;
                                 mergeFunc(*(tableContent + fromIndex), *(tableContent + index), temp, false);
-                                fromIndex = index;
-                                findFirst = true;
+                                int col = fromIndex/tableColumn - 1;
+                                if (col > j)
+                                {
+                                    while (col > j)
+                                    {
+                                        int colindex =  i * tableColumn + col;
+                                        T v = *(tableContent + colindex);
+                                        col--;
+                                        if(!validFunc(v))
+                                        {
+                                            fromIndex = colindex;
+                                            findFirst = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    fromIndex = index;
+                                    findFirst = true;
+                                }
                                 if (print)
                                     printGame(gameShow, toStrFunc);
                             }

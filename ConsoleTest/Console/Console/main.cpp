@@ -92,6 +92,8 @@ int main()
             b = 0;
             return true;
         }
+    }, [](int a, int b)->bool{
+        return a == b;
     });
    
     return 0;
