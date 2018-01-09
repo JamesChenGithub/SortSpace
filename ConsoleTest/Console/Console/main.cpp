@@ -12,25 +12,25 @@
 
 int main()
 {
-    std::hash<std::string> h;
-    size_t n = h("Just");
-    std::cout << n << std::endl;
-    
-    n = h("Justa");
-    std::cout << n << std::endl;
-    
-    n = h("Justb");
-    std::cout << n << std::endl;
-    
-    
-    std::unordered_set<int, std::hash<int> > c0;
-    c0.insert(3);
-    std::cout << *c0.find(3) << std::endl;
+//    std::hash<std::string> h;
+//    size_t n = h("Just");
+//    std::cout << n << std::endl;
+//
+//    n = h("Justa");
+//    std::cout << n << std::endl;
+//
+//    n = h("Justb");
+//    std::cout << n << std::endl;
+//
+//
+//    std::unordered_set<int, std::hash<int> > c0;
+//    c0.insert(10);
+//    std::cout << *c0.find(3) << std::endl;
     
     
     TEightCell<int> cell;
-    cell.randomGame(2);
-    cell.reverse();
+    cell.randomGame(100);
+    
 //    cell.move(0);
 //    cell.move(1);
 //    cell.move(2);

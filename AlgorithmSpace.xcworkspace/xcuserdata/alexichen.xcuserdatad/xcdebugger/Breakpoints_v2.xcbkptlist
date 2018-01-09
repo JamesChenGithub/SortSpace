@@ -105,14 +105,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ConsoleTest/Console/Console/main.cpp"
-            timestampString = "536846616.844971"
+            filePath = "ConsoleTest/Console/Console/EightCell.h"
+            timestampString = "537169438.211701"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "15"
-            endingLineNumber = "15"
-            landmarkName = "main()"
-            landmarkType = "9">
+            startingLineNumber = "183"
+            endingLineNumber = "183"
+            landmarkName = "startSearch(unsigned int arow, unsigned int acol, T *Cells, T *targetCells)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
