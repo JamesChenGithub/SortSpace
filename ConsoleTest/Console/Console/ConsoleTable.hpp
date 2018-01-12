@@ -36,8 +36,8 @@ template <typename T>
 class ConsoleTable
 {
 protected:
-    unsigned int tableRow = 4;
-    unsigned int tableColumn = 4;
+    unsigned int tableRow = 3;
+    unsigned int tableColumn = 3;
     unsigned int tableRowMargin = 1;
     unsigned int tableColumnMargin = 1;
     

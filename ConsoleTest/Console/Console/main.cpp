@@ -28,8 +28,12 @@ int main()
 //    std::cout << *c0.find(3) << std::endl;
     
     
-    TEightCell<int> cell;
-    cell.randomGame(100);
+    TEightCell<int> cell(4,4);
+    
+    cell.randomGame(50);
+    
+//    std::vector<int> vec = {0, 1, 1, 3, 2, 0, 1, 3, 2, 2};
+//    cell.randomGameByStep(vec);
     
 //    cell.move(0);
 //    cell.move(1);

@@ -15,6 +15,7 @@
 #include <list>
 #include <map>
 #include <stack>
+#include <sstream>
 
 
 template <typename T>
@@ -26,10 +27,10 @@ class TEightCell : public ConsoleTable<int> {
         unsigned int row;
         unsigned int col;
         unsigned int tableSize;
-        T   *cells;
-        int step;
-        int spaceIndex;
-        CellStatus *lastStatusRef;
+        T   *cells = nullptr;
+        int step = 0;
+        int spaceIndex = -1;
+        CellStatus *lastStatusRef = nullptr;
         std::list<CellStatus *> openList;
         
         CellStatus(unsigned int arow, unsigned int acol, T *acells)
@@ -58,7 +59,8 @@ class TEightCell : public ConsoleTable<int> {
         
         int getSpaceIndex()
         {
-            if (*(cells + spaceIndex) == 0)
+            
+            if (spaceIndex >= 0 && spaceIndex < tableSize && *(cells + spaceIndex) == 0)
             {
                 return spaceIndex;
             }
@@ -98,17 +100,32 @@ class TEightCell : public ConsoleTable<int> {
             openList.clear();
         }
         
+        std::string getStatudId()
+        {
+            std::stringstream ss;
+            if (cells)
+            {
+                for (int i = 0; i < tableSize; i++)
+                {
+                    ss << *(cells + i) << "_";
+                }
+                return ss.str();
+            }
+            return  "";
+        }
+        
         
     };
     
     
     class  TEightCellBFSearcher
     {
-        CellStatus *startStatus;
-        CellStatus *targetStatus;
+        CellStatus *startStatus = nullptr;
+        CellStatus *targetStatus = nullptr;
         
         
         std::queue<CellStatus *> searchqueue;
+        std::map<std::string, CellStatus *> closeMap;
         
     public:
         std::stack<int> stepStack;
@@ -210,7 +227,7 @@ class TEightCell : public ConsoleTable<int> {
                         // 上
                         if (row > 0)
                         {
-                            oldspace -= from->row;
+                            oldspace -= from->col;
                         }
                         
                         break;
@@ -218,7 +235,7 @@ class TEightCell : public ConsoleTable<int> {
                         // 下
                         if (row <= from->row - 2)
                         {
-                            oldspace += from->row;
+                            oldspace += from->col;
                         }
                         break;
                     case 1:
@@ -303,7 +320,13 @@ class TEightCell : public ConsoleTable<int> {
                             }
                             else
                             {
-                                searchqueue.push(staus);
+                                std::string statusid = staus->getStatudId();
+                                
+                                if (closeMap.find(statusid) == closeMap.end())
+                                {
+                                    closeMap.insert(std::make_pair(statusid, staus));
+                                    searchqueue.push(staus);
+                                }
                             }
                             
                         }
@@ -324,7 +347,7 @@ class TEightCell : public ConsoleTable<int> {
     
 private:
     
-    T   *targetCells;
+    T   *targetCells = nullptr;
     int spaceIndex;
     
     std::vector<int> stepRec;
@@ -344,17 +367,20 @@ public:
         targetCells = nullptr;
     }
     
-    TEightCell(unsigned int row, unsigned int column, unsigned int rowm = 1, unsigned int colm = 1):ConsoleTable<int>(row, column, rowm, column){
+    TEightCell(unsigned int row, unsigned int column, unsigned int rowm = 1, unsigned int colm = 1):ConsoleTable<int>(row, column, rowm, colm){
         targetCells = nullptr;
     }
     
-    void printGame(int type, bool needclear = true)
+    void printGame(int type = -1, bool needclear = true)
     {
         if (needclear)
         {
             system("clear");
         }
-        std::cout << "向" << (type == 0 ? "上" : type == 1 ? "左" : type == 2 ? "右" : "下") << "走" << std::endl;
+        if (type != -1)
+        {
+            std::cout << "向" << (type == 0 ? "上" : type == 1 ? "左" : type == 2 ? "右" : "下") << "("<<type<<")走" << std::endl;
+        }
         this->drawTable2([](int v)->std::string{
             if (v == 0)
             {
@@ -390,10 +416,13 @@ public:
         spaceIndex = this->tableSize - 1;
         memcpy(targetCells, this->tableContent, sizeof(int) * this->tableSize);
         
+        printGame();
         
-        srand( (unsigned)time(NULL));
+        
+        srand((unsigned)time(NULL));
         int count = 0;
         int laststep = -1;
+        std::vector<int> stepss;
         while (++count <= step)
         {
             int i = rand()%4;
@@ -407,6 +436,7 @@ public:
                 if (move(i))
                 {
                     laststep = i;
+                    stepss.push_back(i);
                 }
                 else
                 {
@@ -415,6 +445,11 @@ public:
             }
         }
         
+        std::cout << "产生的路径是:" << std::endl;
+        std::for_each(stepss.begin(), stepss.end(), [](int step){
+            std::cout << step <<", ";
+        });
+        std::cout<< std::endl;
         std::cout << "============开始算法回调============" << std::endl;
         
         TEightCellBFSearcher  *searcher = new  TEightCellBFSearcher;
@@ -422,15 +457,107 @@ public:
         if (succ)
         {
             std::stack<int> & stack = searcher->stepStack;
-            
+            int stepcount = 0;
             do {
+                std::cout << "=============第" << ++stepcount << "步=============" << std::endl;
                 int step = stack.top();
                 stack.pop();
                 move(step);
                 usleep(1000000 * 1);
             } while (!stack.empty());
         }
+        else
+        {
+            std::cout << "=============未找到合适的路径=============" << std::endl;
+        }
         
+    }
+    
+    
+    void randomGameByStep(std::vector<int> vec)
+    {
+        stepRec.clear();
+        
+        memset(this->tableContent, 0, sizeof(int) * this->tableSize);
+        
+        
+        if (targetCells)
+        {
+            delete [] targetCells;
+            targetCells = nullptr;
+        }
+        
+        targetCells = new int[this->tableSize];
+        memset(targetCells, 0, sizeof(int) * this->tableSize);
+        
+        
+        for (int i = 0; i < this->tableSize; i++)
+        {
+            *(this->tableContent + i) = i+1;
+        }
+        
+        *(this->tableContent + this->tableSize - 1) = 0;
+        spaceIndex = this->tableSize - 1;
+        memcpy(targetCells, this->tableContent, sizeof(int) * this->tableSize);
+        
+        printGame();
+        
+        
+        std::cout << "产生的路径是:" << std::endl;
+        std::for_each(vec.begin(), vec.end(), [](int step){
+            std::cout << step <<", ";
+        });
+        std::cout<< std::endl;
+        
+        std::for_each(vec.begin(), vec.end(), [=](int step){
+            this->move(step);
+        });
+        
+        
+//        srand((unsigned)time(NULL));
+//        int count = 0;
+//        int laststep = -1;
+//        while (++count <= step)
+//        {
+//            int i = rand()%4;
+//
+//            if (i + laststep == 3)
+//            {
+//                count--;
+//            }
+//            else
+//            {
+//                if (move(i))
+//                {
+//                    laststep = i;
+//                }
+//                else
+//                {
+//                    count--;
+//                }
+//            }
+//        }
+        
+        std::cout << "============开始算法回调============" << std::endl;
+        
+        TEightCellBFSearcher  *searcher = new  TEightCellBFSearcher;
+        bool succ = searcher->startSearch(this->tableRow, this->tableColumn, this->tableContent, this->targetCells);
+        if (succ)
+        {
+            std::stack<int> & stack = searcher->stepStack;
+            int stepcount = 0;
+            do {
+                std::cout << "=============第" << ++stepcount << "步=============" << std::endl;
+                int step = stack.top();
+                stack.pop();
+                move(step);
+                usleep(1000000 * 1);
+            } while (!stack.empty());
+        }
+        else
+        {
+            std::cout << "=============未找到合适的路径=============" << std::endl;
+        }
     }
     
     void reverse(unsigned int steps = 0)
@@ -467,7 +594,7 @@ public:
                 // 上
                 if (row > 0)
                 {
-                    oldspace -= this->tableRow;
+                    oldspace -= this->tableColumn;
                 }
                 
                 break;
@@ -475,7 +602,7 @@ public:
                 // 下
                 if (row <= this->tableRow - 2)
                 {
-                    oldspace += this->tableRow;
+                    oldspace += this->tableColumn;
                 }
                 break;
             case 1:
