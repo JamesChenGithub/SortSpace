@@ -31,6 +31,7 @@ class TEightCell : public ConsoleTable<int> {
         int step = 0;
         int spaceIndex = -1;
         CellStatus *lastStatusRef = nullptr;
+        bool hasSearched = false;
         std::list<CellStatus *> openList;
         
         CellStatus(unsigned int arow, unsigned int acol, T *acells)
@@ -113,13 +114,12 @@ class TEightCell : public ConsoleTable<int> {
             }
             return  "";
         }
-        
-        
     };
     
     
     class  TEightCellBFSearcher
     {
+    protected:
         CellStatus *startStatus = nullptr;
         CellStatus *targetStatus = nullptr;
         
@@ -190,8 +190,8 @@ class TEightCell : public ConsoleTable<int> {
                 }
                 std::cout << std::endl;
                 
-                
                 searchqueue.push(startStatus);
+                closeMap.insert(std::make_pair(startStatus->getStatudId(), startStatus));
                 do
                 {
                     CellStatus *from = searchqueue.front();
@@ -205,6 +205,26 @@ class TEightCell : public ConsoleTable<int> {
                 }while (!searchqueue.empty());
                 
             }
+            return false;
+        }
+        
+        
+        virtual bool search()
+        {
+            searchqueue.push(startStatus);
+            
+            do
+            {
+                CellStatus *from = searchqueue.front();
+                searchqueue.pop();
+                
+                bool succ = startSearch(from, targetStatus);
+                if(succ == true)
+                {
+                    return true;
+                }
+            }while (!searchqueue.empty());
+            
             return false;
         }
         
@@ -271,8 +291,6 @@ class TEightCell : public ConsoleTable<int> {
                     newstatus->spaceIndex = spaceIndex;
                     newstatus->step = type;
                     
-                    
-                    
                     return newstatus;
                 }
             }
@@ -280,7 +298,7 @@ class TEightCell : public ConsoleTable<int> {
             return nullptr;
         }
         
-        bool startSearch(CellStatus *from, CellStatus *target)
+        virtual bool startSearch(CellStatus *from, CellStatus *target, bool isReverse = false)
         {
             if (from && target)
             {
@@ -304,6 +322,7 @@ class TEightCell : public ConsoleTable<int> {
                             continue;
                         }
                         
+                        std::string fromid = from->getStatudId();
                         CellStatus *staus = move(from, i);
                         if (staus)
                         {
@@ -321,6 +340,8 @@ class TEightCell : public ConsoleTable<int> {
                             else
                             {
                                 std::string statusid = staus->getStatudId();
+                                
+                                // std::cout << " 出点串 : " << fromid << "   向" << (i == 0 ? "上" : i == 1 ? "左" : i == 2 ? "右" : "下") << "("<<i<<")走    " <<" 状态串 : " << statusid << std::endl;
                                 
                                 if (closeMap.find(statusid) == closeMap.end())
                                 {
@@ -345,7 +366,126 @@ class TEightCell : public ConsoleTable<int> {
         
     };
     
-private:
+    
+    class  TEightCellDBFSearcher : public TEightCellBFSearcher
+    {
+    protected:
+        std::queue<CellStatus *> reverseSearchqueue;
+        std::map<std::string, CellStatus *> reverseCloseMap;
+        
+    public:
+        virtual bool search()
+        {
+            this->searchqueue.push(this->startStatus);
+            reverseSearchqueue.push(this->targetStatus);
+            
+            do
+            {
+                CellStatus *from = this->searchqueue.front();
+                this->searchqueue.pop();
+                
+                bool succ = this->startSearch(from, this->targetStatus, false);
+                if(succ == true)
+                {
+                    return true;
+                }
+                else
+                {
+                    CellStatus *last = this->searchqueue.back();
+                    std::string lastid = last->getStatudId();
+                    
+                    auto it = reverseCloseMap.find(lastid);
+                    if (it != reverseCloseMap.end())
+                    {
+                       // 说明找到
+                        std::list<int> steplist;
+                        
+                        CellStatus * end = last;
+                        do
+                        {
+                            steplist.push_front(end->step);
+                            end = end->lastStatusRef;
+                        } while (end != this->startStatus);
+                        
+                        
+                        CellStatus *reverseend = it->second;
+                        reverseend = reverseend->lastStatusRef;
+                        do
+                        {
+                            steplist.push_back(3 - reverseend->step);
+                            reverseend = reverseend->lastStatusRef;
+                        } while (reverseend != this->targetStatus);
+                        
+                        while (!this->stepStack.empty())
+                        {
+                            this->stepStack.pop();
+                        }
+                        
+                        std::for_each(steplist.rbegin(), steplist.rend(), [=](int step){
+                            this->stepStack.push(step);
+                        });
+                        
+                        return true;
+                    }
+                    
+                }
+                
+                
+                CellStatus *to = this->reverseSearchqueue.front();
+                this->reverseSearchqueue.pop();
+                
+                succ = this->startSearch(to, this->startStatus);
+                if(succ == true)
+                {
+                    return true;
+                }
+                else
+                {
+                    CellStatus *last = this->reverseSearchqueue.back();
+                    std::string lastid = last->getStatudId();
+                    auto it = this->closeMap.find(lastid);
+                    if (this->closeMap.find(lastid) != this->closeMap.end())
+                    {
+                        // 说明找到
+                        
+                        // 说明找到
+                        std::list<int> steplist;
+                        CellStatus * end = it->second;
+                        do
+                        {
+                            steplist.push_front(end->step);
+                            end = end->lastStatusRef;
+                        } while (end != this->startStatus);
+                        
+                        
+                        CellStatus *reverseend = last;
+                        reverseend = reverseend->lastStatusRef;
+                        do
+                        {
+                            steplist.push_back(3 - reverseend->step);
+                            reverseend = reverseend->lastStatusRef;
+                        } while (reverseend != this->targetStatus);
+                        
+                        while (!this->stepStack.empty())
+                        {
+                            this->stepStack.pop();
+                        }
+                        
+                        std::for_each(steplist.rbegin(), steplist.rend(), [=](int step){
+                            this->stepStack.push(step);
+                        });
+                        
+                        return true;
+                    }
+                }
+                
+            }while (!this->searchqueue.empty() || !this->reverseSearchqueue.empty());
+            
+            return false;
+        }
+    };
+    
+protected:
     
     T   *targetCells = nullptr;
     int spaceIndex;
@@ -403,7 +543,7 @@ public:
             targetCells = nullptr;
         }
         
-        targetCells = new int[this->tableSize];
+        targetCells = new T[this->tableSize];
         memset(targetCells, 0, sizeof(int) * this->tableSize);
         
         
@@ -450,26 +590,56 @@ public:
             std::cout << step <<", ";
         });
         std::cout<< std::endl;
-        std::cout << "============开始算法回调============" << std::endl;
         
-        TEightCellBFSearcher  *searcher = new  TEightCellBFSearcher;
-        bool succ = searcher->startSearch(this->tableRow, this->tableColumn, this->tableContent, this->targetCells);
-        if (succ)
+        T *cells = new T[this->tableSize];
+         memcpy(cells, this->tableContent, sizeof(int) * this->tableSize);
+        
         {
-            std::stack<int> & stack = searcher->stepStack;
-            int stepcount = 0;
-            do {
-                std::cout << "=============第" << ++stepcount << "步=============" << std::endl;
-                int step = stack.top();
-                stack.pop();
-                move(step);
-                usleep(1000000 * 1);
-            } while (!stack.empty());
+//            std::cout << "============开始宽度优先算法回调============" << std::endl;
+//            TEightCellBFSearcher  *searcher = new  TEightCellBFSearcher;
+//            bool succ = searcher->startSearch(this->tableRow, this->tableColumn, cells, this->targetCells);
+//            if (succ)
+//            {
+//                std::stack<int> & stack = searcher->stepStack;
+//                int stepcount = 0;
+//                do {
+//                    std::cout << "=============第" << ++stepcount << "步=============" << std::endl;
+//                    int step = stack.top();
+//                    stack.pop();
+//                    move(step);
+//                    usleep(1000000 * 1);
+//                } while (!stack.empty());
+//            }
+//            else
+//            {
+//                std::cout << "=============未找到合适的路径=============" << std::endl;
+//            }
         }
-        else
+        
         {
-            std::cout << "=============未找到合适的路径=============" << std::endl;
+            std::cout << "============开始双向宽度优先算法回调============" << std::endl;
+            TEightCellDBFSearcher  *searcher = new  TEightCellDBFSearcher;
+            bool succ = searcher->startSearch(this->tableRow, this->tableColumn, cells, this->targetCells);
+            if (succ)
+            {
+                std::stack<int> & stack = searcher->stepStack;
+                int stepcount = 0;
+                do {
+                    std::cout << "=============第" << ++stepcount << "步=============" << std::endl;
+                    int step = stack.top();
+                    stack.pop();
+                    move(step);
+                    usleep(1000000 * 1);
+                } while (!stack.empty());
+            }
+            else
+            {
+                std::cout << "=============未找到合适的路径=============" << std::endl;
+            }
         }
+        
+        delete []cells;
+        cells = nullptr;
         
     }
     
@@ -487,7 +657,7 @@ public:
             targetCells = nullptr;
         }
         
-        targetCells = new int[this->tableSize];
+        targetCells = new T[this->tableSize];
         memset(targetCells, 0, sizeof(int) * this->tableSize);
         
         
@@ -514,49 +684,72 @@ public:
         });
         
         
-//        srand((unsigned)time(NULL));
-//        int count = 0;
-//        int laststep = -1;
-//        while (++count <= step)
-//        {
-//            int i = rand()%4;
-//
-//            if (i + laststep == 3)
-//            {
-//                count--;
-//            }
-//            else
-//            {
-//                if (move(i))
-//                {
-//                    laststep = i;
-//                }
-//                else
-//                {
-//                    count--;
-//                }
-//            }
-//        }
+        //        srand((unsigned)time(NULL));
+        //        int count = 0;
+        //        int laststep = -1;
+        //        while (++count <= step)
+        //        {
+        //            int i = rand()%4;
+        //
+        //            if (i + laststep == 3)
+        //            {
+        //                count--;
+        //            }
+        //            else
+        //            {
+        //                if (move(i))
+        //                {
+        //                    laststep = i;
+        //                }
+        //                else
+        //                {
+        //                    count--;
+        //                }
+        //            }
+        //        }
         
-        std::cout << "============开始算法回调============" << std::endl;
-        
-        TEightCellBFSearcher  *searcher = new  TEightCellBFSearcher;
-        bool succ = searcher->startSearch(this->tableRow, this->tableColumn, this->tableContent, this->targetCells);
-        if (succ)
+        std::cout << "============开始宽度优先算法回调============" << std::endl;
         {
-            std::stack<int> & stack = searcher->stepStack;
-            int stepcount = 0;
-            do {
-                std::cout << "=============第" << ++stepcount << "步=============" << std::endl;
-                int step = stack.top();
-                stack.pop();
-                move(step);
-                usleep(1000000 * 1);
-            } while (!stack.empty());
+            TEightCellBFSearcher  *searcher = new  TEightCellBFSearcher;
+            bool succ = searcher->startSearch(this->tableRow, this->tableColumn, this->tableContent, this->targetCells);
+            if (succ)
+            {
+                std::stack<int> & stack = searcher->stepStack;
+                int stepcount = 0;
+                do {
+                    std::cout << "=============第" << ++stepcount << "步=============" << std::endl;
+                    int step = stack.top();
+                    stack.pop();
+                    move(step);
+                    usleep(1000000 * 1);
+                } while (!stack.empty());
+            }
+            else
+            {
+                std::cout << "=============未找到合适的路径=============" << std::endl;
+            }
         }
-        else
+        
+        std::cout << "============开始双向宽度优先算法回调============" << std::endl;
         {
-            std::cout << "=============未找到合适的路径=============" << std::endl;
+            TEightCellDBFSearcher  *searcher = new  TEightCellDBFSearcher;
+            bool succ = searcher->startSearch(this->tableRow, this->tableColumn, this->tableContent, this->targetCells);
+            if (succ)
+            {
+                std::stack<int> & stack = searcher->stepStack;
+                int stepcount = 0;
+                do {
+                    std::cout << "=============第" << ++stepcount << "步=============" << std::endl;
+                    int step = stack.top();
+                    stack.pop();
+                    move(step);
+                    usleep(1000000 * 1);
+                } while (!stack.empty());
+            }
+            else
+            {
+                std::cout << "=============未找到合适的路径=============" << std::endl;
+            }
         }
     }
     
