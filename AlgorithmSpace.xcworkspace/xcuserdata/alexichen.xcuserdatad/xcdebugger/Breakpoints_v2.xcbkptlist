@@ -49,38 +49,6 @@
             endingLineNumber = "848"
             landmarkName = "firstNotRepeatingChar2(std::string str)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Sample28::firstNotRepeatingChar2(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;)"
-                  moduleName = "SortSpace"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/alexichen/GitHubWorkSpace/SortSpace/SortSpace/SortSpace/main.cpp"
-                  timestampString = "537964658.810847"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "848"
-                  endingLineNumber = "848"
-                  offsetFromSymbolStart = "4088">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Sample28::firstNotRepeatingChar2(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;)::&apos;lambda1&apos;(std::__1::pair&lt;char, int&gt;)::operator()(std::__1::pair&lt;char, int&gt;) const"
-                  moduleName = "SortSpace"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/alexichen/GitHubWorkSpace/SortSpace/SortSpace/SortSpace/main.cpp"
-                  timestampString = "537964658.812567"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "849"
-                  endingLineNumber = "849"
-                  offsetFromSymbolStart = "12">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

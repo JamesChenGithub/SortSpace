@@ -16,4 +16,7 @@
    <FileRef
       location = "group:CPP/CPP.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:CPP/../STLStudy.xcodeproj">
+   </FileRef>
 </Workspace>
