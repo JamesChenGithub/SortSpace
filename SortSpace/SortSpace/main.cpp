@@ -8,12 +8,16 @@
 
 #include <iostream>
 #include <stdio.h>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <unordered_map>
 
 using namespace std;
 // 从小到大排序
 class SortSample
 {
-
+    
 public:
     
     void swap(int &a, int &b)
@@ -64,7 +68,7 @@ public:
                 a[k] = a[i];
                 a[i] = temp;
             }
-           
+            
             
             
             print(a, n, i);
@@ -310,7 +314,7 @@ public:
             {
                 quickSort(a, n, low, pivot-1);
                 quickSort(a, n, pivot + 1, heigh);
-               
+                
             }
         }
         
@@ -362,7 +366,7 @@ public:
             
             memcpy(a+left, temp, sizeof(int) * (right - left + 1));
         }
-//        print(temp, right - left + 1);
+        //        print(temp, right - left + 1);
         free(temp);
         temp = nullptr;
     }
@@ -377,7 +381,7 @@ public:
             if (mid != left)
             {
                 mergeSort(a, left, mid);
-//                print(a + left, right - left+1);
+                //                print(a + left, right - left+1);
             }
             
             
@@ -385,7 +389,7 @@ public:
             {
                 mergeSort(a, mid+1, right);
                 
-//                print(a + left, right - left+1);
+                //                print(a + left, right - left+1);
             }
             
             mergeArray(a, left, mid, right);
@@ -475,9 +479,9 @@ public:
         int imax, iLeft, iRight;
         while (true)
         {
-             imax = index;
-             iLeft = 2*index + 1;
-             iRight = 2*index + 2;
+            imax = index;
+            iLeft = 2*index + 1;
+            iRight = 2*index + 2;
             
             if (iLeft < heapSize && array[iLeft] > array[index])
             {
@@ -531,28 +535,390 @@ public:
     }
 };
 
+
+class Sample28
+{
+public:
+    void MoreThanHalfNum_Solution(std::vector<int> vec)
+    {
+        std::sort(std::begin(vec), std::end(vec), [](int a, int b)->int{
+            return b - a;
+        });
+        int count = (int)vec.size();
+        int last = *vec.begin();
+        bool succ = false;
+        int t = 1;
+        std::for_each(vec.begin() + 1, vec.end(), [&](int a){
+            if (!succ)
+            {
+                if (last == a)
+                {
+                    t++;
+                    if (t > count/2)
+                    {
+                        std::cout << "超半数的字为" << last << endl;
+                        succ = true;
+                    }
+                }
+                else
+                {
+                    t = 1;
+                    last = a;
+                }
+            }
+            
+        });
+        
+        {
+            int count = (int)vec.size();
+            int last = *vec.begin();
+            bool succ = false;
+            int t = 1;
+            int idex =  1;
+            auto func = [&](int a)->bool{
+                idex++;
+                if (last == a)
+                {
+                    t++;
+                    if (t > count/2)
+                    {
+                        succ = true;
+                        return true;
+                    }
+                }
+                else
+                {
+                    t = 1;
+                    last = a;
+                }
+                return false;
+            };
+            
+            auto findx = std::find_if(vec.begin() + 1, vec.end(), func);
+            if (findx != vec.end())
+            {
+                std::cout << "超半数的字为" << *findx << endl;
+            }
+        }
+        
+    }
+    
+    //输入n个整数，找出其中最小的K个数。例如输入4,5,1,6,2,7,3,8这8个数字，则最小的4个数字是1,2,3,4,。
+    std::vector<int> getLeastNumbers_Solution(vector<int> input, int k)
+    {
+        std::vector<int> outvec;
+        
+        std::sort(input.begin(), input.end());
+        std::for_each(input.begin(), input.end(), [](int a){std::cout << a << "  ";});
+        std::cout << std::endl;
+        
+        auto iter = std::unique(input.begin(), input.end());
+        while(iter != input.end())
+        {
+            input.erase(iter);
+        }
+        
+        
+        std::for_each(input.begin(), input.end(), [](int a){std::cout << a << "  ";});
+        std::cout << std::endl;
+        
+        std::copy(input.begin(), input.begin() + k, std::back_inserter(outvec));
+        
+        std::for_each(outvec.begin(), outvec.end(), [](int a){std::cout << a << "  ";});
+        std::cout << std::endl;
+        
+        return outvec;
+    }
+    
+    int findGreatestSumOfSubArray(vector<int> array)
+    {
+        {
+            std::cout << "====================" << std::endl;
+            std::for_each(array.begin(), array.end(), [](int a) { std::cout << a << "  ";});
+            std::cout << std::endl;
+             std::cout << std::endl;
+             std::cout << std::endl;
+            // 穷举
+            if (array.size() > 0)
+            {
+                
+                std::vector<std::vector<int>> outmap;
+                
+                int i = 0;
+                while(i < array.size())
+                {
+                
+                    std::vector<int> outvec;
+                    outvec.push_back(*(array.begin() + i));
+                    int index = 0;
+                    std::for_each(array.begin() + i + 1, array.end(), [&](int a){
+                        outvec.push_back(outvec[index] + a);
+                        index++;
+                    });
+                    
+                    std::for_each(outvec.begin(), outvec.end(), [](int a) { std::cout << a << "  ";});
+                    std::cout << std::endl;
+                    
+                    outmap.push_back(outvec);
+                    i++;
+                }
+                
+                int j = 0;
+                auto temp = *outmap.begin();
+                auto max = std::max_element(temp.begin(), temp.end());
+                
+                int maxIndex = j;
+                int maxvecIndex = max - temp.begin();
+                
+                int maxint = *max;
+                std::cout << "max sub sum : " << *max << endl;
+                j++;
+                while (j < outmap.size())
+                {
+                    std::cout << j << "=====>>>>>";
+                    auto temp2 = *(outmap.begin() + j);
+                    std::for_each(temp2.begin(), temp2.end(), [](int a) { std::cout << a << "  ";});
+                    auto max2 = std::max_element(temp2.begin(), temp2.end());
+                    std::cout << "==================>>>>>>   max is " << *max2  << "    " << outmap[maxIndex][maxvecIndex] << std::endl;
+                    if (*max2  > maxint)
+                    {
+                        maxint = *max2;
+                        maxIndex = j;
+                        maxvecIndex = max2 - temp2.begin();
+                        std::cout << "===>>>>>==>>>>>max sub sum : " << *max2 << "    " << outmap[maxIndex][maxvecIndex]  << "    " << maxint << endl;
+                    }
+                    j++;
+                }
+                
+                
+                std::cout << "<<<<< max sub sum : " << outmap[maxIndex][maxvecIndex]  << "    " << maxint << endl;
+                return maxint;
+            }
+            std::cout << " ===================================" << std::endl;
+            {
+                // 动态规划：
+                int max = -100000000;
+                int curmax = 0;
+                
+                std::for_each(array.begin(), array.end(), [&](int a) {
+                    if (curmax <= 0)
+                    {
+                        curmax = a;
+                    }
+                    else
+                    {
+                        curmax += a;
+                    }
+                    
+                    if (max < curmax)
+                    {
+                        max = curmax;
+                    }
+                });
+                
+                std::cout << "max sub sum : " << max << endl;
+            }
+        }
+        return 0;
+    }
+    
+    int getUglyNum(int n)
+    {
+        if (n <= 0)
+        {
+            return 0;
+        }
+        
+        if (n == 1)
+        {
+            return 1;
+        }
+        
+        std::vector<int> ugleVec = {1};
+        int p2 = 0;
+        int p3 = 0;
+        int p5 = 0;
+        
+        int nextIndex = 1;
+        while (nextIndex < n)
+        {
+            int min = std::min({ugleVec[p2] * 2, ugleVec[p3] * 3, ugleVec[p5] * 5}, [](int a, int b)->bool{
+                return a < b ? true : false;
+                
+            });
+            ugleVec.push_back(min);
+            
+            while (ugleVec[p2] * 2 <= ugleVec[nextIndex]) {
+                p2++;
+            }
+            
+            while (ugleVec[p3] * 3 <= ugleVec[nextIndex]) {
+                p3++;
+            }
+            
+            while (ugleVec[p5] * 5 <= ugleVec[nextIndex]) {
+                p5++;
+            }
+            
+            nextIndex++;
+            
+        }
+        
+        return ugleVec[nextIndex - 1];
+    }
+    
+    
+    
+    struct DisableCompare : public std::binary_function<char, char, bool>
+    {
+        bool operator()(char lhs, char rhs)  const
+        {
+            return true;
+        }
+    };
+    
+    char firstNotRepeatingChar(std::string str)
+    {
+        {
+            int map[128];
+            bzero(map, 128 * sizeof(int));
+            const char *cstr = str.c_str();
+            
+            int i = 0;
+            while (i < str.length())
+            {
+                char c = *(cstr + i);
+                if (map[c] == 0)
+                {
+                    map[c] = 1;
+                }
+                else
+                {
+                    map[c] = -1;
+                }
+                i++;
+            }
+             i = 0;
+            while (i < str.length())
+            {
+                char c = *(cstr + i);
+                if (map[c] == 1)
+                {
+                    std::cout << str << "首次出现一次的字符是 :" <<  c << std::endl;
+                    return c;
+                }
+                i++;
+            }
+            
+            std::cout << str << "首次出现一次的字符是 : 未找到" << std::endl;
+        }
+        
+        return 0;
+    }
+    
+    char firstNotRepeatingChar2(std::string str)
+    {
+        std::unordered_map<char, int> map;
+         const char *cstr = str.c_str();
+        int i = 0;
+        while (i < str.length())
+        {
+            char c = *(cstr + i);
+            auto key = map.find(c);
+            if (key == map.end()) {
+                map[c] = 1;
+            }
+            else
+            {
+                key->second++;
+            }
+            i++;
+        }
+        
+        
+        
+        std::for_each(map.cbegin(), map.cend(), [](std::pair<char, int> pair){
+            cout << "key = " << pair.first << ", value =" << pair.second << std::endl;
+        });
+        
+        std::for_each(map.begin(), map.end(), [](std::pair<char, int> pair){
+            cout << "key = " << pair.first << ", value =" << pair.second << std::endl;
+        });
+        
+        auto fk = std::find_if(map.cbegin(), map.cend(), [](std::pair<char, int> pair)->bool{
+            if (pair.second == 1)
+            {
+                return true;
+            }
+            return false;
+        });
+        if (fk != map.cend())
+        {
+        
+            std::cout << str << "首次出现一次的字符是 :" <<  fk->first << std::endl;
+        }
+        else
+        {
+            std::cout << str << "首次出现一次的字符是 : 未找到" << std::endl;
+        }
+        return 0;
+    }
+};
+
+
 int main(int argc, const char * argv[]) {
-   
+    Sample28 s28;
+//    s28.MoreThanHalfNum_Solution(std::vector<int>{1,2,3,2,2,2,5,4,2});
+//    s28.getLeastNumbers_Solution({4,5,1,6,2,7,3,8,11,23,1,2,2,3}, 4);
+////    s28.findGreatestSumOfSubArray({6,-3,-2,7,-15,1,2,2});
+//
+//    s28.findGreatestSumOfSubArray({-6,-3,-2,-7,-15,-1,-2,-2});
+//
+//    std::cout << "=======获取丑数========" << std::endl;
+//    for (int i = 0; i < 10; i++)
+//    {
+//        std::cout << "第" << i << "个丑数是:" << s28.getUglyNum(i) << std::endl;
+//    }
+    
+    std::string test = "baidu";
+    s28.firstNotRepeatingChar(test);
+    s28.firstNotRepeatingChar2(test);
+    
+    test = "google";
+    s28.firstNotRepeatingChar(test);
+    s28.firstNotRepeatingChar2(test);
+    
+    test = "dcba";
+    s28.firstNotRepeatingChar(test);
+    s28.firstNotRepeatingChar2(test);
+    
+    test = "dcbadcb";
+    s28.firstNotRepeatingChar(test);
+    s28.firstNotRepeatingChar2(test);
+    
+    return 0;
+    
+    
     
     const int kArraySize = abs(rand()%50) ;
     int *array = new int[kArraySize];
     memset(array, 0, kArraySize);
-
+    
     for (int k = 0; k < kArraySize; k++)
     {
         array[k] = abs(rand()%1000) + 10;
     }
-
+    
     SortSample ss;
     ss.print(array, kArraySize);
-
+    
     cout << "=======冒泡排序======" << endl;
-
+    
     int bubbleArray[kArraySize];
     memcpy(bubbleArray, array, sizeof(bubbleArray));
     ss.print(bubbleArray, kArraySize);
     ss.bubbleSort(bubbleArray, kArraySize);
-
+    
     cout << "=======冒泡2排序======" << endl;
     memcpy(bubbleArray, array, sizeof(bubbleArray));
     ss.bubbleSortV2(bubbleArray, kArraySize);
@@ -572,7 +938,7 @@ int main(int argc, const char * argv[]) {
     ss.bubbleSortV2(bt, 10);
     cout << "=======冒泡3排序======" << endl;
     ss.bubbleSortV2(bt, 10);
-
+    
     cout << "=======插入排序======" << endl;
     ss.print(array, kArraySize);
     int insertArray[kArraySize];
@@ -582,7 +948,7 @@ int main(int argc, const char * argv[]) {
     memcpy(insertArray, array, sizeof(insertArray));
     ss.insertSortV2(insertArray, kArraySize);
     
-
+    
     cout << "=======Shell排序======" << endl;
     ss.print(array, kArraySize);
     int shellArray[kArraySize];
@@ -640,30 +1006,30 @@ int main(int argc, const char * argv[]) {
     
     
     
-//    int arr[6] = {3, 1, 4, 2, 6,5};
-//    ss.quickSort(arr, 6, 0, 5);
-//
-//    int arr2[6] = {3, 1, 4, 2, 6,5};
-//    ss.mergeSort(arr2, 6);
-//
-//    const int kSize = abs(rand()%50) ;
-//    int *tesArray = new int[kSize];
-//    memset(tesArray, 0, kArraySize);
-//
-//    for (int k = 0; k < kSize; k++)
-//    {
-//        tesArray[k] = abs(rand()%kSize);
-//    }
-//
-//    ss.print(tesArray, kSize);
-//    ss.checkHasRepeat(tesArray, kSize);
-//
-//    int temp[3] = {0,1,2};
-//    ss.checkHasRepeat(temp, 3);
-//
-//
-//    free(tesArray);
-//    tesArray = nullptr;
+    //    int arr[6] = {3, 1, 4, 2, 6,5};
+    //    ss.quickSort(arr, 6, 0, 5);
+    //
+    //    int arr2[6] = {3, 1, 4, 2, 6,5};
+    //    ss.mergeSort(arr2, 6);
+    //
+    //    const int kSize = abs(rand()%50) ;
+    //    int *tesArray = new int[kSize];
+    //    memset(tesArray, 0, kArraySize);
+    //
+    //    for (int k = 0; k < kSize; k++)
+    //    {
+    //        tesArray[k] = abs(rand()%kSize);
+    //    }
+    //
+    //    ss.print(tesArray, kSize);
+    //    ss.checkHasRepeat(tesArray, kSize);
+    //
+    //    int temp[3] = {0,1,2};
+    //    ss.checkHasRepeat(temp, 3);
+    //
+    //
+    //    free(tesArray);
+    //    tesArray = nullptr;
     
     return 0;
 }

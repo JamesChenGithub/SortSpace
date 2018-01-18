@@ -16,6 +16,14 @@
 #include <map>
 #include <stack>
 #include <sstream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <algorithm>
+
+long labs(long a)
+{
+    return a > 0 ? a : -a;
+}
 
 
 template <typename T>
@@ -33,6 +41,17 @@ class TEightCell : public ConsoleTable<int> {
         CellStatus *lastStatusRef = nullptr;
         bool hasSearched = false;
         std::list<CellStatus *> openList;
+        
+        
+        long gValue;
+        long hValue;
+        long fValue;
+        
+        inline bool operator < (CellStatus const &other) const
+        {
+            return fValue < other.fValue;
+            
+        }
         
         CellStatus(unsigned int arow, unsigned int acol, T *acells)
         {
@@ -151,7 +170,7 @@ class TEightCell : public ConsoleTable<int> {
             return false;
         }
         
-        bool startSearch(unsigned int arow, unsigned int acol, T *Cells, T *targetCells)
+        virtual bool startSearch2(unsigned int arow, unsigned int acol, T *Cells, T *targetCells)
         {
             if(Cells && targetCells)
             {
@@ -365,7 +384,7 @@ class TEightCell : public ConsoleTable<int> {
         
         
     };
-    
+
     
     class  TEightCellDBFSearcher : public TEightCellBFSearcher
     {
@@ -485,6 +504,190 @@ class TEightCell : public ConsoleTable<int> {
         }
     };
     
+    
+    class TEightAStarSearcher : public TEightCellBFSearcher
+    {
+    protected:
+//        std::priority_queue<CellStatus *> searchPriorityQueue;
+//    public:
+//
+//        virtual bool startSearch2(unsigned int arow, unsigned int acol, T *Cells, T *targetCells)
+//        {
+//            if(Cells && targetCells)
+//            {
+//
+//                std::stack<int> s;
+//                //                if (!stepStack.empty())
+//                //                    stepStack.swap(std::stack<int>());
+//
+//                if (this->startStatus)
+//                {
+//                    delete this->startStatus;
+//                    this->startStatus = nullptr;
+//                }
+//
+//                this->startStatus = new CellStatus(arow, acol, Cells);
+//
+//                std::cout << "startStatus  : ";
+//                for (int i = 0; i < arow * acol; i++)
+//                {
+//                    std::cout << *(this->startStatus->cells + i) << "   ";
+//                }
+//                std::cout << std::endl;
+//
+//                if (this->targetStatus)
+//                {
+//                    delete this->targetStatus;
+//                    this->targetStatus = nullptr;
+//                }
+//
+//                this->targetStatus = new CellStatus(arow, acol, targetCells);
+//
+//                std::cout << "targetStatus : ";
+//                for (int i = 0; i < arow * acol; i++)
+//                {
+//                    std::cout << *(this->targetStatus->cells + i) << "   ";
+//                }
+//                std::cout << std::endl;
+//
+//                searchPriorityQueue.push(this->startStatus);
+//                this->closeMap.insert(std::make_pair(this->startStatus->getStatudId(), this->startStatus));
+//                do
+//                {
+//                    CellStatus *from = searchPriorityQueue.禾火;
+//                    searchPriorityQueue.pop();
+//
+//                    bool succ = startSearch(from, this->targetStatus);
+//                    if(succ == true)
+//                    {
+//                        return true;
+//                    }
+//                }while (!this->searchPriorityQueue.empty());
+//
+//            }
+//            return false;
+//        }
+        virtual void estimateToTarget(CellStatus *&status)
+        {
+            CellStatus *target = this->targetStatus;
+            if (target)
+            {
+                // 计算每一个方块距离它正确位置的距离
+                // 曼哈顿距离
+                long manhattanDistance = 0;
+                for (int index = 0; index < status->tableSize; ++index)
+                {
+                    // 略过空格
+                    if (index == status->getSpaceIndex())
+                    {
+                        continue;
+                    }
+
+                    int value = status->cells[index];
+                    int targetValue = this->targetStatus->cells[index];
+                    manhattanDistance += labs(value / status->col - targetValue / target->col) + labs( value % status->col - targetValue % target->col);
+                }
+
+                // 增大权重
+                status->hValue = 5 * manhattanDistance;
+            }
+        }
+        
+        virtual bool startSearch(CellStatus *from, CellStatus *target, bool isReverse = false)
+        {
+            if (from && target)
+            {
+                if (this->isTarget(from))
+                {
+                    CellStatus *end = from;
+                    do
+                    {
+                        this->stepStack.push(end->step);
+                        end = end->lastStatusRef;
+                    } while (end != nullptr);
+                    
+                    return true;
+                }
+                else
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (from != this->startStatus && i == 3 - from->step)
+                        {
+                            continue;
+                        }
+                        
+                        std::string fromid = from->getStatudId();
+                        CellStatus *staus = this->move(from, i);
+                        if (staus)
+                        {
+                            if (this->isTarget(staus))
+                            {
+                                CellStatus *end = staus;
+                                do
+                                {
+                                    this->stepStack.push(end->step);
+                                    end = end->lastStatusRef;
+                                } while (end != this->startStatus);
+                                
+                                return true;
+                            }
+                            else
+                            {
+                                std::string statusid = staus->getStatudId();
+                                
+                                // std::cout << " 出点串 : " << fromid << "   向" << (i == 0 ? "上" : i == 1 ? "左" : i == 2 ? "右" : "下") << "("<<i<<")走    " <<" 状态串 : " << statusid << std::endl;
+                                
+                                if (this->closeMap.find(statusid) == this->closeMap.end())
+                                {
+                                    this->closeMap.insert(std::make_pair(statusid, staus));
+                                    
+                                    staus->gValue = from->gValue + 1;
+                                    
+                                    estimateToTarget(staus);
+                                    
+                                    
+                                    staus->fValue = staus->gValue + staus->hValue;
+                                    
+                                    this->searchqueue.push(staus);
+                                    
+                                    
+                                    std::vector<CellStatus *> templist;
+                                    while(!this->searchqueue.empty())
+                                    {
+                                        templist.push_back(this->searchqueue.front());
+                                        this->searchqueue.pop();
+                                    }
+                                    
+                                    std::sort(templist.begin(), templist.end(), [](CellStatus *a, CellStatus *b)->long{
+                                        return a->fValue - b->fValue;
+                                    });
+                                    
+                                    
+                                    std::for_each(templist.begin(), templist.end(), [=](CellStatus *a){
+//                                        std::cout << a->fValue << "  ";
+                                        this->searchqueue.push(a);
+                                    });
+                                    std::cout << std::endl;
+                                    
+                                }
+                            }
+                            
+                        }
+                    }
+                    
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+                
+            }
+        }
+    };
+    
+    
 protected:
     
     T   *targetCells = nullptr;
@@ -592,12 +795,36 @@ public:
         std::cout<< std::endl;
         
         T *cells = new T[this->tableSize];
-         memcpy(cells, this->tableContent, sizeof(int) * this->tableSize);
+        memcpy(cells, this->tableContent, sizeof(int) * this->tableSize);
         
         {
+            std::cout << "============开始A*先算法回调============" << std::endl;
+            TEightAStarSearcher *asearcher = new  TEightAStarSearcher;
+            bool succ = asearcher->startSearch2(this->tableRow, this->tableColumn, cells, this->targetCells);
+            if (succ)
+            {
+                std::stack<int> & stack = asearcher->stepStack;
+                int stepcount = 0;
+                do {
+                    std::cout << "=============第" << ++stepcount << "步=============" << std::endl;
+                    int step = stack.top();
+                    stack.pop();
+                    move(step);
+                    usleep(1000000 * 1);
+                } while (!stack.empty());
+            }
+            else
+            {
+                std::cout << "=============未找到合适的路径=============" << std::endl;
+            }
+            delete asearcher;
+            asearcher = nullptr;
+        }
+        
+//        {
 //            std::cout << "============开始宽度优先算法回调============" << std::endl;
 //            TEightCellBFSearcher  *searcher = new  TEightCellBFSearcher;
-//            bool succ = searcher->startSearch(this->tableRow, this->tableColumn, cells, this->targetCells);
+//            bool succ = searcher->startSearch2(this->tableRow, this->tableColumn, cells, this->targetCells);
 //            if (succ)
 //            {
 //                std::stack<int> & stack = searcher->stepStack;
@@ -614,29 +841,33 @@ public:
 //            {
 //                std::cout << "=============未找到合适的路径=============" << std::endl;
 //            }
-        }
-        
-        {
-            std::cout << "============开始双向宽度优先算法回调============" << std::endl;
-            TEightCellDBFSearcher  *searcher = new  TEightCellDBFSearcher;
-            bool succ = searcher->startSearch(this->tableRow, this->tableColumn, cells, this->targetCells);
-            if (succ)
-            {
-                std::stack<int> & stack = searcher->stepStack;
-                int stepcount = 0;
-                do {
-                    std::cout << "=============第" << ++stepcount << "步=============" << std::endl;
-                    int step = stack.top();
-                    stack.pop();
-                    move(step);
-                    usleep(1000000 * 1);
-                } while (!stack.empty());
-            }
-            else
-            {
-                std::cout << "=============未找到合适的路径=============" << std::endl;
-            }
-        }
+//            delete searcher;
+//            searcher = nullptr;
+//        }
+//
+//        {
+//            std::cout << "============开始双向宽度优先算法回调============" << std::endl;
+//            TEightCellDBFSearcher  *searcher = new  TEightCellDBFSearcher;
+//            bool succ = searcher->startSearch2(this->tableRow, this->tableColumn, cells, this->targetCells);
+//            if (succ)
+//            {
+//                std::stack<int> & stack = searcher->stepStack;
+//                int stepcount = 0;
+//                do {
+//                    std::cout << "=============第" << ++stepcount << "步=============" << std::endl;
+//                    int step = stack.top();
+//                    stack.pop();
+//                    move(step);
+//                    usleep(1000000 * 1);
+//                } while (!stack.empty());
+//            }
+//            else
+//            {
+//                std::cout << "=============未找到合适的路径=============" << std::endl;
+//            }
+//            delete searcher;
+//            searcher = nullptr;
+//        }
         
         delete []cells;
         cells = nullptr;

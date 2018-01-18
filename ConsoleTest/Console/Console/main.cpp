@@ -30,7 +30,7 @@ int main()
     
     TEightCell<int> cell(4,4);
     
-    cell.randomGame(20);
+    cell.randomGame(40);
     
 //    std::vector<int> vec = {0, 1, 1, 3, 2, 0, 1, 3, 2, 2};
 //    cell.randomGameByStep(vec);
