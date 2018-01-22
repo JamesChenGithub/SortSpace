@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		92390ED72010C00F00700631 /* STLAlloctor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92390ED52010C00F00700631 /* STLAlloctor.cpp */; };
 		92390ED92010C02800700631 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92390ED82010C02800700631 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -24,8 +23,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		923015E420119CDB003BE8F1 /* STLAutoPtr.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = STLAutoPtr.hpp; path = STLStudy/STLAutoPtr.hpp; sourceTree = "<group>"; };
 		92390EC22010BF7600700631 /* STLStudy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = STLStudy; sourceTree = BUILT_PRODUCTS_DIR; };
-		92390ED52010C00F00700631 /* STLAlloctor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = STLAlloctor.cpp; path = STLStudy/STLAlloctor.cpp; sourceTree = "<group>"; };
 		92390ED62010C00F00700631 /* STLAlloctor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = STLAlloctor.hpp; path = STLStudy/STLAlloctor.hpp; sourceTree = "<group>"; };
 		92390ED82010C02800700631 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = STLStudy/main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -62,7 +61,7 @@
 			children = (
 				92390ED82010C02800700631 /* main.cpp */,
 				92390ED62010C00F00700631 /* STLAlloctor.hpp */,
-				92390ED52010C00F00700631 /* STLAlloctor.cpp */,
+				923015E420119CDB003BE8F1 /* STLAutoPtr.hpp */,
 			);
 			path = STLStudy;
 			sourceTree = "<group>";
@@ -125,7 +124,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				92390ED92010C02800700631 /* main.cpp in Sources */,
-				92390ED72010C00F00700631 /* STLAlloctor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
