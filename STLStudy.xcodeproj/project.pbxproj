@@ -27,6 +27,7 @@
 		92390EC22010BF7600700631 /* STLStudy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = STLStudy; sourceTree = BUILT_PRODUCTS_DIR; };
 		92390ED62010C00F00700631 /* STLAlloctor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = STLAlloctor.hpp; path = STLStudy/STLAlloctor.hpp; sourceTree = "<group>"; };
 		92390ED82010C02800700631 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = STLStudy/main.cpp; sourceTree = "<group>"; };
+		926143E62017473D0055E7AD /* Student.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Student.hpp; path = STLStudy/Student.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +63,7 @@
 				92390ED82010C02800700631 /* main.cpp */,
 				92390ED62010C00F00700631 /* STLAlloctor.hpp */,
 				923015E420119CDB003BE8F1 /* STLAutoPtr.hpp */,
+				926143E62017473D0055E7AD /* Student.hpp */,
 			);
 			path = STLStudy;
 			sourceTree = "<group>";
@@ -236,6 +238,7 @@
 		92390ECA2010BF7600700631 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 43YJ58H38Q;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -245,6 +248,7 @@
 		92390ECB2010BF7600700631 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 43YJ58H38Q;
 				PRODUCT_NAME = "$(TARGET_NAME)";
