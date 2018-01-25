@@ -26,7 +26,7 @@
                         <constraint firstAttribute="width" constant="120" id="LNG-Ct-a0l"/>
                         <constraint firstAttribute="height" constant="40" id="gZM-iV-nmp"/>
                     </constraints>
-                    <state key="normal" title="Regist_All"/>
+                    <state key="normal" title="网络音乐"/>
                     <connections>
                         <action selector="registAll:" destination="-1" eventType="touchUpInside" id="YgZ-NX-kze"/>
                     </connections>
@@ -37,7 +37,7 @@
                         <constraint firstAttribute="height" constant="40" id="N8h-o4-pNi"/>
                         <constraint firstAttribute="width" constant="120" id="zDw-4v-IyU"/>
                     </constraints>
-                    <state key="normal" title="Un_Regist_All"/>
+                    <state key="normal" title="本地音乐"/>
                     <connections>
                         <action selector="unregistAll:" destination="-1" eventType="touchUpInside" id="71O-1Z-11T"/>
                     </connections>

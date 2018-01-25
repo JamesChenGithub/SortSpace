@@ -41,9 +41,10 @@
 		929347322018744500732B2F /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 929347312018744500732B2F /* MediaPlayer.framework */; };
 		92934734201874A900732B2F /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92934733201874A900732B2F /* VideoToolbox.framework */; };
 		92934736201874AF00732B2F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92934735201874AF00732B2F /* AudioToolbox.framework */; };
-		929347392018811800732B2F /* FFTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 929347382018811800732B2F /* FFTableViewController.m */; };
+		929347392018811800732B2F /* FFTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 929347382018811800732B2F /* FFTableViewController.mm */; };
 		929347412018842B00732B2F /* PlayAudioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9293473F2018842B00732B2F /* PlayAudioViewController.m */; };
 		929347422018842B00732B2F /* PlayAudioViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 929347402018842B00732B2F /* PlayAudioViewController.xib */; };
+		92BF1B252018BA6300A017DA /* byebye.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 92BF1B242018BA6300A017DA /* byebye.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -194,11 +195,12 @@
 		92934733201874A900732B2F /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
 		92934735201874AF00732B2F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		929347372018811800732B2F /* FFTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFTableViewController.h; sourceTree = "<group>"; };
-		929347382018811800732B2F /* FFTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FFTableViewController.m; sourceTree = "<group>"; };
+		929347382018811800732B2F /* FFTableViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FFTableViewController.mm; sourceTree = "<group>"; };
 		9293473A201881A800732B2F /* ConstHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConstHeader.h; sourceTree = "<group>"; };
 		9293473E2018842B00732B2F /* PlayAudioViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayAudioViewController.h; sourceTree = "<group>"; };
 		9293473F2018842B00732B2F /* PlayAudioViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayAudioViewController.m; sourceTree = "<group>"; };
 		929347402018842B00732B2F /* PlayAudioViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayAudioViewController.xib; sourceTree = "<group>"; };
+		92BF1B242018BA6300A017DA /* byebye.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = byebye.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,6 +239,7 @@
 		9293463F2018661500732B2F = {
 			isa = PBXGroup;
 			children = (
+				92BF1B242018BA6300A017DA /* byebye.mp3 */,
 				9293467D2018676500732B2F /* FFMPEGLib */,
 				9293464A2018661500732B2F /* FFMPEGConverter */,
 				929346492018661500732B2F /* Products */,
@@ -256,7 +259,7 @@
 			isa = PBXGroup;
 			children = (
 				929347372018811800732B2F /* FFTableViewController.h */,
-				929347382018811800732B2F /* FFTableViewController.m */,
+				929347382018811800732B2F /* FFTableViewController.mm */,
 				9293464B2018661500732B2F /* AppDelegate.h */,
 				9293464C2018661500732B2F /* AppDelegate.m */,
 				929346512018661500732B2F /* Main.storyboard */,
@@ -574,6 +577,7 @@
 				929347092018676500732B2F /* LICENSE.md in Resources */,
 				929347422018842B00732B2F /* PlayAudioViewController.xib in Resources */,
 				929347112018676500732B2F /* README.md in Resources */,
+				92BF1B252018BA6300A017DA /* byebye.mp3 in Resources */,
 				929346582018661500732B2F /* LaunchScreen.storyboard in Resources */,
 				929347052018676500732B2F /* COPYING.GPLv2 in Resources */,
 				929347042018676500732B2F /* .stderr in Resources */,
@@ -592,7 +596,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9293465B2018661500732B2F /* main.m in Sources */,
-				929347392018811800732B2F /* FFTableViewController.m in Sources */,
+				929347392018811800732B2F /* FFTableViewController.mm in Sources */,
 				9293464D2018661500732B2F /* AppDelegate.m in Sources */,
 				929347412018842B00732B2F /* PlayAudioViewController.m in Sources */,
 			);

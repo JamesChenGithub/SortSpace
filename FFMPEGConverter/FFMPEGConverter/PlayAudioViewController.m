@@ -55,6 +55,24 @@ extern "C"
 
 #define MAX_AUDIO_FRAME_SIZE 96000 // 1 second of 48khz 32bit audio
 
+- (IBAction)unregistAll:(UIButton *)sender
+{
+//    av_register_all();
+//    AVFormatContext *pFormatContext = avformat_alloc_context();
+//
+//    NSString *res = [[NSBundle mainBundle] pathForResource:@"byebye" ofType:@"mp3"];
+//    avformat_open_input(&pFormatContext, [res UTF8String], NULL, NULL);
+//
+//    AVDictionary *opdic = NULL;
+//    avformat_find_stream_info(pFormatContext, &opdic);
+//
+//    avcodec_find_decoder(pFormatContext->codec_id);
+//    AVCodec *codec = avcodec_find_decoder(pFormatContext->codec_id);
+//
+//    avcodec_open2(<#AVCodecContext *avctx#>, <#const AVCodec *codec#>, <#AVDictionary **options#>)
+    
+}
+
 - (IBAction)registAll:(UIButton *)sender
 {
     av_register_all();
@@ -180,12 +198,17 @@ extern "C"
             if (got_picture > 0)
             {
                 
-                fwrite(pFrame->data[0], 1, pFrame->linesize[0], _rawFile);
+                for(int i = 0; i < pFrame->channels; i++)
+                {
+                    fwrite(pFrame->data[i], 1, pFrame->linesize[0], _rawFile);
+                }
                 
-                swr_convert(_auConvertContext, &out_buffer, MAX_AUDIO_FRAME_SIZE, (const uint8_t **)pFrame->data, pFrame->nb_samples);
-                NSLog(@"index:%5d\t pts:%lld\t packet size:%d\n",index,_avPacket->pts,_avPacket->size);
                 
-                fwrite(out_buffer, 1, out_buffer_size, _pcmFile);
+                
+//                swr_convert(_auConvertContext, &out_buffer, MAX_AUDIO_FRAME_SIZE, (const uint8_t **)pFrame->data, pFrame->nb_samples);
+//                NSLog(@"index:%5d\t pts:%lld\t packet size:%d\n",index,_avPacket->pts,_avPacket->size);
+//                
+//                fwrite(out_buffer, 1, out_buffer_size, _pcmFile);
                 
                 index++;
             }
@@ -214,9 +237,6 @@ extern "C"
     [sender setTitle:@"Over" forState:UIControlStateNormal];
 }
 
-- (IBAction)unregistAll:(UIButton *)sender
-{
-    
-}
+
 
 @end

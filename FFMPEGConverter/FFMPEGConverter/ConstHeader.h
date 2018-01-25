@@ -14,5 +14,6 @@
 
 #define kAudioTestURL @"http://dldir1.qq.com/hudongzhibo/TCShow/byebye.mp3"
 
+#define DebugLog(fmt, ...) NSLog((@"[%s Line %d]" fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 
 #endif /* ConstHeader_h */
