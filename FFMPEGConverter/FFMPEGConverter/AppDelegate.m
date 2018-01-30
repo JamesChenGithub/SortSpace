@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#include "ConstHeader.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    av_register_all();
+    avcodec_register_all();
+    avformat_network_init();
     return YES;
 }
 
