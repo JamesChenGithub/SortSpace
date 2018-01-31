@@ -39,6 +39,18 @@
         
         NSString *temp = NSTemporaryDirectory();
         simple_yuv420_graybar(640 , 480, 0, 255, 10, [[temp stringByAppendingString:@"output_graybar.yuv"] UTF8String]);
+        
+        
+        NSString *dis = [[NSBundle mainBundle] pathForResource:@"lena_distort_256x256_yuv420p" ofType:@"yuv"];
+        
+        simplest_yuv420_psne([lena_yuv420p_path UTF8String], [dis UTF8String], 256, 256, 1);
+        
+        NSString *rgb = [[NSBundle mainBundle] pathForResource:@"cie1931_500x500" ofType:@"rgb"];
+        simplest_rgb24_split([rgb UTF8String], 500, 500, 1);
+        
+        
+        NSString *rgb_lena = [[NSBundle mainBundle] pathForResource:@"lena_256x256_rgb24" ofType:@"rgb"];
+        simple_rgb24_to_yuv420([rgb_lena UTF8String], 256, 256);
     });
     
     
@@ -267,6 +279,188 @@ int simple_yuv420_graybar(int width, int height, int ymin, int ymax, int barnum,
     
     return 0;
 }
+
+int simplest_yuv420_psne(char *url1, char *url2, int w, int h, int num)
+{
+    FILE *fp1 = fopen(url1, "rb+");
+    FILE *fp2 = fopen(url2, "rb+");
+    
+    
+    int size = w * h * 3 / 2;
+    unsigned char *pic1 = (unsigned char *)malloc(size);
+    unsigned char *pic2 = (unsigned char *)malloc(size);
+    for (int i = 0; i < num; i++)
+    {
+        fread(pic1, size, 1, fp1);
+        fread(pic2, size, 1, fp2);
+        
+        double mse_sum = 0, mse = 0, psnr = 0;
+        
+        for(int j = 0; j < w *h; j++)
+        {
+            mse_sum += pow((pic1[j] - pic2[2]), 2);
+        }
+        
+        mse = mse_sum/(w*h);
+        psnr = 10 *log10(255 * 255 / mse);
+        printf("Psnr = %5.3f", psnr);
+    }
+    
+    
+    free(pic1);
+    free(pic2);
+    fclose(fp1);
+    fclose(fp2);
+    
+    
+    return 0;
+}
+
+int simplest_rgb24_split(char *url, int w, int h, int num)
+{
+    FILE *fp = fopen(url, "rb+");
+    NSString *temp = NSTemporaryDirectory();
+    NSLog(@"%@", temp);
+    FILE *fp1 = fopen([[temp stringByAppendingString:@"output_r.y"] UTF8String], "wb+");
+    FILE *fp2 = fopen([[temp stringByAppendingString:@"output_g.y"] UTF8String], "wb+");
+    FILE *fp3 = fopen([[temp stringByAppendingString:@"output_b.y"] UTF8String], "wb+");
+    
+    unsigned char *pic = (unsigned char *)malloc(w * h * 3);
+    for (int i = 0; i < num; i++)
+    {
+        fread(pic, w * h * 3, 1, fp);
+        
+        for (int j = 0; j < w * h * 3; j += 3)
+        {
+            fwrite(pic+j, 1, 1, fp1);
+            fwrite(pic+j+1, 1, 1, fp2);
+            fwrite(pic+j+2, 1, 1, fp3);
+        }
+    }
+    
+    free(pic);
+    fclose(fp);
+    fclose(fp1);
+    fclose(fp2);
+    fclose(fp3);
+    return 0;
+}
+
+//int simple_rgb242bmp(const char *rgb24path,int width,int height)
+//{
+//    typedef struct{
+//        long imageSize;
+//        long blank;
+//        long startPosition;
+//    } BMPHead;
+//
+//    typedef struct{
+//        long length;
+//        long width;
+//        long height;
+//        unsigned short colorPlane;
+//        unsigned short bitColor;
+//        long zipFormat;
+//        long realSize;
+//        long xPels;
+//        long yPels;
+//        long colorUse;
+//        long colorImport;
+//
+//
+//    } BMPINfo;
+//    return 0;
+//}
+
+int clip_value(int value, int min, int max)
+{
+    if (value < min)
+    {
+        return min;
+    }
+    else if (value > max)
+    {
+        return max;
+    }
+    else
+    {
+        return value;
+    }
+}
+
+int rgb24_to_yuv420p(unsigned char *rgb, int w, int h, unsigned char *yuv)
+{
+    unsigned char *py, *pu, *pv, *ptrrgb;
+    memset(yuv, 0, w*h*3/2);
+    
+    py = yuv;
+    pu = yuv + w*h;
+    pv = pu + w*h/4;
+    
+    
+    unsigned char y,u,v,r,g,b;
+    for (int j = 0; j < h; j++)
+    {
+        ptrrgb = rgb + j * w * 3;
+        
+        for (int i = 0; i < w; i++)
+        {
+            r = *(ptrrgb++);
+            g = *(ptrrgb++);
+            b = *(ptrrgb++);
+            
+            y = (unsigned char)((66 * r + 129 * g + 25*b + 128) >> 8) + 16;
+            
+            *(py++) = clip_value(y, 0, 255);
+            
+            if (j%2==0 && i%2 == 0)
+            {
+//                *(pu++) = 128;
+                u = (unsigned char)((-38 * r - 74 * g + 112*b + 128) >> 8) + 128;
+                *(pu++) = clip_value(u, 0, 255);
+            }
+            else
+            {
+                if (i%2 == 0)
+                {
+//                    *(pv++) = 128;
+                    v = (unsigned char)((112 * r - 94 * g - 18*b + 128) >> 8) + 128;
+                    *(pv++) = clip_value(v, 0, 255);
+                }
+            }
+        }
+    }
+    
+    
+    
+    return 0;
+    
+}
+
+int simple_rgb24_to_yuv420(char *url, int w, int h)
+{
+    FILE *fp =fopen(url, "rb+");
+    
+    NSString *temp = NSTemporaryDirectory();
+    NSLog(@"%@", temp);
+    FILE *fp1 = fopen([[temp stringByAppendingString:@"output_lena.yuv"] UTF8String], "wb+");
+    
+    unsigned char *rgb = (unsigned char *)malloc(w*h*3);
+    unsigned char *yuv = (unsigned char *)malloc(w*h*3/2);
+    
+    fread(rgb, w*h*3, 1, fp);
+    
+    
+    
+    fwrite(yuv, w*h*3/2, 1, fp1);
+    
+    fclose(fp);
+    fclose(fp1);
+    
+    return 0;
+    
+}
+
 
 /*
 #pragma mark - Navigation
