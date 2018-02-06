@@ -9,6 +9,7 @@
 #import "FFTableViewController.h"
 #include "PlayAudioViewController.h"
 #include "YUVViewController.h"
+#include "PCMViewController.h"
 #include "ConstHeader.h"
 
 
@@ -35,7 +36,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 4;
+    return 5;
 }
 
 
@@ -65,6 +66,10 @@
     {
         text = @"YUV测试";
     }
+    else if (indexPath.row == 4)
+    {
+        text = @"PCM测试";
+    }
     
     cell.textLabel.text = text;
     
@@ -93,6 +98,11 @@
     else if (indexPath.row == 3)
     {
         YUVViewController *vc = [[YUVViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else if (indexPath.row == 4)
+    {
+        PCMViewController *vc = [[PCMViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
