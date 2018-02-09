@@ -218,23 +218,23 @@ void changeSize(int w, int h) {
 }
 
 int main(int argc, char * argv[]) {
-    
-    
-        printf("ffplay adev0.mp4\n");
-        system("ffplay adev0.mp4");
-
-    
-//    sleep(61);
-    
-    std::thread([](){
-        printf("ffplay adev1.mp4\n");
-        system("ffplay adev1.mp4");
-    }).detach();
-    
-    int a;
-    std::cin >> a ;
-    
-    return 0;
+//
+//
+//        printf("ffplay adev0.mp4\n");
+//        system("ffplay adev0.mp4");
+//
+//
+////    sleep(61);
+//
+//    std::thread([](){
+//        printf("ffplay adev1.mp4\n");
+//        system("ffplay adev1.mp4");
+//    }).detach();
+//
+//    int a;
+//    std::cin >> a ;
+//
+//    return 0;
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     
