@@ -10,6 +10,7 @@
 #include "PlayAudioViewController.h"
 #include "YUVViewController.h"
 #include "PCMViewController.h"
+#include "YUVShowViewController.h"
 #include "ConstHeader.h"
 
 
@@ -36,7 +37,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 5;
+    return 6;
 }
 
 
@@ -69,6 +70,10 @@
     else if (indexPath.row == 4)
     {
         text = @"PCM测试";
+    }
+    else if (indexPath.row == 5)
+    {
+        text = @"显示YUV数据";
     }
     
     cell.textLabel.text = text;
@@ -103,6 +108,11 @@
     else if (indexPath.row == 4)
     {
         PCMViewController *vc = [[PCMViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else if (indexPath.row == 5)
+    {
+        YUVShowViewController *vc = [[YUVShowViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
