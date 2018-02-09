@@ -12,7 +12,7 @@
 
 - (void)dealloc
 {
-    [self destoryRenderAndFrameBuffer];
+    [self destoryGL];
     NSLog(@"OpenGLView Dealloc");
 }
 
@@ -23,6 +23,7 @@
 
 - (void)setupLayer
 {
+    [self setContentScaleFactor:[UIScreen mainScreen].scale];
     _eaglLayer = (CAEAGLLayer *)self.layer;
     _eaglLayer.opaque = YES;
     
@@ -34,7 +35,7 @@
 {
     [super layoutSubviews];
     
-    [self destoryRenderAndFrameBuffer];
+    [self destoryGL];
     
     [self setupRenderBuffer];
     
@@ -68,7 +69,7 @@
     [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
 }
 
-- (void)destoryRenderAndFrameBuffer
+- (void)destoryGL
 {
     glDeleteFramebuffers(1, &_frameBuffer);
     _frameBuffer = 0;

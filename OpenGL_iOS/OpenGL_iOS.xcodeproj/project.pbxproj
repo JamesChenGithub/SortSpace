@@ -335,8 +335,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 43YJ58H38Q;
+				DEVELOPMENT_TEAM = P7W6W36ZY5;
 				INFOPLIST_FILE = OpenGL_iOS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tencent.OpenGL-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -349,8 +350,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 43YJ58H38Q;
+				DEVELOPMENT_TEAM = P7W6W36ZY5;
 				INFOPLIST_FILE = OpenGL_iOS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tencent.OpenGL-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";

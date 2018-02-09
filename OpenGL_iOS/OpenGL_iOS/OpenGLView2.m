@@ -13,6 +13,11 @@
 @implementation OpenGLView2
 
 
+- (void)dealloc
+{
+    glDeleteProgram(_programHandle);
+    _programHandle = 0;
+}
 - (void)setupProgram
 {
     
@@ -81,13 +86,19 @@
     glClear(GL_COLOR_BUFFER_BIT);
     
     
+    CGFloat scale = [UIScreen mainScreen].scale;
+    glViewport(0, 0, self.bounds.size.width * scale , self.bounds.size.height * scale);
     
-    glViewport(0, 0, self.bounds.size.width, self.bounds.size.height);
+//    GLfloat vertics[] = {
+//        0.5, 0, 0,
+//        0, 0.5, 0,
+//        -0.5, 0, 0
+//    };
     
     GLfloat vertics[] = {
-        0.0f, 0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f
+        0.25, 0, 0,
+        0, 0.25, 0,
+        -0.25, 0, 0
     };
     
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertics);
@@ -96,7 +107,10 @@
     
     glDrawArrays(GL_TRIANGLES, 0, 3);
     
+    glDisableVertexAttribArray(_positionSlot);
+    
     [_context presentRenderbuffer:GL_RENDERBUFFER];
+    
     
 }
 
