@@ -24,5 +24,7 @@
 
 - (void)doInitGL;
 
+- (void)doRender;
+- (void)render;
 
 @end

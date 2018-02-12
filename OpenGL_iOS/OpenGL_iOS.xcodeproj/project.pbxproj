@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		92643FE920301E7400FFC046 /* LineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92643FE820301E7400FFC046 /* LineViewController.m */; };
+		92643FEC20301E8200FFC046 /* TrangleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92643FEB20301E8200FFC046 /* TrangleViewController.m */; };
+		92643FEF2030203D00FFC046 /* DrawBaseView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92643FEE2030203D00FFC046 /* DrawBaseView.mm */; };
+		92643FFC203067F300FFC046 /* GraphViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 92643FFB203067F300FFC046 /* GraphViewController.mm */; };
 		92CFFEA9202D83B200FB8420 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CFFEA8202D83B200FB8420 /* AppDelegate.m */; };
 		92CFFEAF202D83B200FB8420 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92CFFEAD202D83B200FB8420 /* Main.storyboard */; };
 		92CFFEB1202D83B200FB8420 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92CFFEB0202D83B200FB8420 /* Assets.xcassets */; };
@@ -25,6 +29,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		92643FE720301E7400FFC046 /* LineViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LineViewController.h; sourceTree = "<group>"; };
+		92643FE820301E7400FFC046 /* LineViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LineViewController.m; sourceTree = "<group>"; };
+		92643FEA20301E8200FFC046 /* TrangleViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TrangleViewController.h; sourceTree = "<group>"; };
+		92643FEB20301E8200FFC046 /* TrangleViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TrangleViewController.m; sourceTree = "<group>"; };
+		92643FED2030203D00FFC046 /* DrawBaseView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrawBaseView.h; sourceTree = "<group>"; };
+		92643FEE2030203D00FFC046 /* DrawBaseView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DrawBaseView.mm; sourceTree = "<group>"; };
+		92643FFA203067F300FFC046 /* GraphViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphViewController.h; sourceTree = "<group>"; };
+		92643FFB203067F300FFC046 /* GraphViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphViewController.mm; sourceTree = "<group>"; };
 		92CFFEA4202D83B200FB8420 /* OpenGL_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenGL_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92CFFEA7202D83B200FB8420 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		92CFFEA8202D83B200FB8420 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -107,6 +119,14 @@
 				92CFFED4202DBCBE00FB8420 /* FragmentShader.glsl */,
 				92CFFED6202DBD6B00FB8420 /* OpenGLView2.h */,
 				92CFFED7202DBD6B00FB8420 /* OpenGLView2.m */,
+				92643FE720301E7400FFC046 /* LineViewController.h */,
+				92643FE820301E7400FFC046 /* LineViewController.m */,
+				92643FEA20301E8200FFC046 /* TrangleViewController.h */,
+				92643FEB20301E8200FFC046 /* TrangleViewController.m */,
+				92643FED2030203D00FFC046 /* DrawBaseView.h */,
+				92643FEE2030203D00FFC046 /* DrawBaseView.mm */,
+				92643FFA203067F300FFC046 /* GraphViewController.h */,
+				92643FFB203067F300FFC046 /* GraphViewController.mm */,
 			);
 			path = OpenGL_iOS;
 			sourceTree = "<group>";
@@ -193,12 +213,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				92CFFEB7202D83B200FB8420 /* main.m in Sources */,
+				92643FEF2030203D00FFC046 /* DrawBaseView.mm in Sources */,
 				92CFFEBF202D847200FB8420 /* FirstViewController.m in Sources */,
+				92643FEC20301E8200FFC046 /* TrangleViewController.m in Sources */,
 				92CFFED1202DBBD900FB8420 /* ThirdViewController.m in Sources */,
 				92CFFED8202DBD6B00FB8420 /* OpenGLView2.m in Sources */,
+				92643FE920301E7400FFC046 /* LineViewController.m in Sources */,
 				92CFFEA9202D83B200FB8420 /* AppDelegate.m in Sources */,
 				92CFFECE202DA56B00FB8420 /* SecondViewController.m in Sources */,
 				92CFFEC2202D84BA00FB8420 /* TableViewController.m in Sources */,
+				92643FFC203067F300FFC046 /* GraphViewController.mm in Sources */,
 				92CFFECB202DA27B00FB8420 /* GLESUtil.m in Sources */,
 				92CFFEC5202D8C0100FB8420 /* OpenGLView.m in Sources */,
 			);

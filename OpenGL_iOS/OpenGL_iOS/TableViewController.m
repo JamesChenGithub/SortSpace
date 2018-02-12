@@ -44,6 +44,29 @@
     item.keyText = @"测试顶点着色器";
     item.segueIdentifier = @"SecondViewController";
     [self.tableItems addObject:item];
+    
+    item = [[TableItem alloc] init];
+    item.keyText = @"OpenGL Draw Base";
+    item.segueIdentifier = @"ThirdViewController";
+    [self.tableItems addObject:item];
+    
+    
+    item = [[TableItem alloc] init];
+    item.keyText = @"OpenGL Draw Line";
+    item.segueIdentifier = @"LineViewController";
+    [self.tableItems addObject:item];
+    
+    
+    item = [[TableItem alloc] init];
+    item.keyText = @"OpenGL Draw Graphic";
+    item.segueIdentifier = @"TrangleViewController";
+    [self.tableItems addObject:item];
+    
+    
+    item = [[TableItem alloc] init];
+    item.keyText = @"OpenGL dynamic draw Graphic";
+    item.segueIdentifier = @"GraphViewController";
+    [self.tableItems addObject:item];
 }
 
 - (void)didReceiveMemoryWarning {

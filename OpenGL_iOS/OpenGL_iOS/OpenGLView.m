@@ -13,7 +13,7 @@
 - (void)dealloc
 {
     [self destoryGL];
-    NSLog(@"OpenGLView Dealloc");
+    NSLog(@"%@ Dealloc", [self class]);
 }
 
 + (Class)layerClass
@@ -41,7 +41,7 @@
     
     [self setupFrameBuffer];
     
-    [self render];
+    [self doRender];
 }
 
 - (void)setupContext
@@ -81,22 +81,41 @@
 - (void)setBackgroundColor:(UIColor *)backgroundColor
 {
     [super setBackgroundColor:backgroundColor];
+    [self doRender];
+}
+
+- (void)doRender
+{
+    [self preRender];
     [self render];
 }
 
-
 - (void)render
 {
-    const CGFloat *com =  CGColorGetComponents(self.backgroundColor.CGColor);
-    CGFloat R = com[0];
-    CGFloat G = com[1];
-    CGFloat B = com[2];
-    CGFloat A = com[3];
-    glClearColor(R, G, B, A);
+     [_context presentRenderbuffer:GL_RENDERBUFFER];
+}
+- (void)preRender
+{
+    int numComponents = CGColorGetNumberOfComponents(self.backgroundColor.CGColor);
+    if (numComponents == 4)
+    {
+        const CGFloat *com =  CGColorGetComponents(self.backgroundColor.CGColor);
+        CGFloat R = com[0];
+        CGFloat G = com[1];
+        CGFloat B = com[2];
+        CGFloat A = com[3];
+        glClearColor(R, G, B, A);
+    }
+    else
+    {
+        glClearColor(0.2, 0.2, 0.2, 0.3);
+    }
     
     glClear(GL_COLOR_BUFFER_BIT);
+    CGFloat scale  = [UIScreen mainScreen].scale;
+    glViewport(0, 0, self.bounds.size.width * scale , self.bounds.size.height * scale);
     
-    [_context presentRenderbuffer:GL_RENDERBUFFER];
+   
     
 }
 

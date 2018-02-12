@@ -70,32 +70,36 @@
     glUseProgram(_programHandle);
     
     _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
-    
-    
 }
 
 - (void)render
 {
-    const CGFloat *com =  CGColorGetComponents(self.backgroundColor.CGColor);
-    CGFloat R = com[0];
-    CGFloat G = com[1];
-    CGFloat B = com[2];
-    CGFloat A = com[3];
-    glClearColor(R, G, B, A);
-    
-    glClear(GL_COLOR_BUFFER_BIT);
-    CGFloat scale  = [UIScreen mainScreen].scale;
+//    const CGFloat *com =  CGColorGetComponents(self.backgroundColor.CGColor);
+//    CGFloat R = com[0];
+//    CGFloat G = com[1];
+//    CGFloat B = com[2];
+//    CGFloat A = com[3];
+//    glClearColor(R, G, B, A);
+//    
+//    glClear(GL_COLOR_BUFFER_BIT);
+//    CGFloat scale  = [UIScreen mainScreen].scale;
+//    glViewport(0, 0, self.bounds.size.width * scale , self.bounds.size.height * scale);
     
     //========================
     {
-        glViewport(0, 0, self.bounds.size.width * scale , self.bounds.size.height * scale);
+        
+//        GLfloat vertics[] = {
+//            0.25, 0.5, 0,
+//            0, 0.75, 0,
+//            -0.25, 0.5, 0
+//        };
+
         
         GLfloat vertics[] = {
-            -0.5, 0.75, 0,
-            0, 0.75, 0,
-            -0.25, 0.5, 0
+            -0.5, 0.5, 0,
+            0.5, -0.5, 0,
+            -0.5, -0.5, 0
         };
-        
         glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertics);
         
         glEnableVertexAttribArray(_positionSlot);
@@ -104,13 +108,38 @@
         
         glDisableVertexAttribArray(_positionSlot);
     }
+    //    //========================
+    //    {
+    //        GLfloat vertics2[] = {
+    //            0.25, 0, 0,
+    //            0, 0.25, 0,
+    //            -0.25, 0, 0,
+    //            0.25, 0, 0,
+    //        };
+    //
+    //
+    //
+    //        glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertics2);
+    //
+    //        glEnableVertexAttribArray(_positionSlot);
+    //
+    //
+    //        glLineWidth(scale * 2);
+    //
+    //        glDrawArrays(GL_LINES, 0, 2);
+    //        glDrawArrays(GL_LINES, 1, 2);
+    //        glDrawArrays(GL_LINES, 2, 2);
+    //
+    //        glDisableVertexAttribArray(_positionSlot);
+    //
+    //    }
     //========================
-    {
+//    {
 //        GLfloat vertics2[] = {
 //            0.25, 0, 0,
 //            0, 0.25, 0,
 //            -0.25, 0, 0,
-//            0.25, 0, 0,
+//
 //        };
 //
 //
@@ -122,34 +151,11 @@
 //
 //        glLineWidth(scale * 2);
 //
-//        glDrawArrays(GL_LINES, 0, 2);
-//        glDrawArrays(GL_LINES, 1, 2);
-//        glDrawArrays(GL_LINES, 2, 2);
+//        glDrawArrays(GL_LINE_LOOP, 0, 3);
 //
 //        glDisableVertexAttribArray(_positionSlot);
-        
-    }
-    //========================
-    {
-        GLfloat vertics2[] = {
-            0.25 , 0, 0,
-            0, 0.25, 0,
-            -0.25, 0, 0,
-            
-        };
-        
-        glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertics2);
-        
-        glEnableVertexAttribArray(_positionSlot);
-        
-        
-        glLineWidth(scale * 2);
-        
-        glDrawArrays(GL_LINE_LOOP, 0, 3);
-        
-        glDisableVertexAttribArray(_positionSlot);
-        
-    }
+//
+//    }
     
     [_context presentRenderbuffer:GL_RENDERBUFFER];
     

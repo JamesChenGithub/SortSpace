@@ -1,35 +1,22 @@
 //
-//  ThirdViewController.m
+//  TrangleViewController.m
 //  OpenGL_iOS
 //
-//  Created by AlexiChen on 2018/2/9.
+//  Created by AlexiChen on 2018/2/11.
 //  Copyright © 2018年 AlexiChen. All rights reserved.
 //
 
-#import "ThirdViewController.h"
-#include "DrawBaseView.h"
+#import "TrangleViewController.h"
 
-@interface ThirdViewController ()
+@interface TrangleViewController ()
 
 @end
 
-@implementation ThirdViewController
+@implementation TrangleViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    DrawBaseView *glView = (DrawBaseView *)self.view;
-    
-    GLfloat vertexs[] = {
-        0,0.5,0,
-        0.5,0,0,
-        
-    };
-    
-    [glView draw:vertexs mode:GL_LINES vetexCount:sizeof(vertexs)/ (sizeof(GLfloat)*3)];
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {

@@ -38,26 +38,71 @@
                         <segue destination="ZrR-tM-oc2" kind="show" identifier="FirstViewController" id="zHd-oI-SZO"/>
                         <segue destination="RZV-sZ-vl5" kind="show" identifier="ThirdViewController" id="ppH-mA-tcz"/>
                         <segue destination="YCK-MS-0zu" kind="show" identifier="SecondViewController" id="lvA-jd-JWo"/>
+                        <segue destination="fMp-NN-DdE" kind="show" identifier="LineViewController" id="QTY-rU-NzZ"/>
+                        <segue destination="i1w-ts-uL2" kind="show" identifier="TrangleViewController" id="FmJ-S1-v3k"/>
+                        <segue destination="IXx-yK-8mV" kind="show" identifier="GraphViewController" id="rer-iB-sei"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1bd-ay-dN7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="206" y="89"/>
         </scene>
-        <!--Third View Controller-->
-        <scene sceneID="Ojx-WW-ZjN">
+        <!--Line-->
+        <scene sceneID="kgC-m3-e7x">
             <objects>
-                <viewController id="RZV-sZ-vl5" customClass="ThirdViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="PgW-zz-MNS">
+                <viewController title="Line" id="fMp-NN-DdE" customClass="LineViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Z05-My-smo">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <subviews>
+                            <view tag="100" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ctY-Oo-kOZ" customClass="DrawLineView">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="JF5-tr-9uw" firstAttribute="trailing" secondItem="ctY-Oo-kOZ" secondAttribute="trailing" id="Vbl-Jd-bZU"/>
+                            <constraint firstItem="ctY-Oo-kOZ" firstAttribute="leading" secondItem="JF5-tr-9uw" secondAttribute="leading" id="aMR-Cf-gXW"/>
+                            <constraint firstItem="JF5-tr-9uw" firstAttribute="bottom" secondItem="ctY-Oo-kOZ" secondAttribute="bottom" id="bsq-Su-lwc"/>
+                            <constraint firstItem="ctY-Oo-kOZ" firstAttribute="top" secondItem="JF5-tr-9uw" secondAttribute="top" id="ymc-D6-a15"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="JF5-tr-9uw"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Nbn-r0-S7f" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="324" y="-726"/>
+        </scene>
+        <!--Base-->
+        <scene sceneID="Ojx-WW-ZjN">
+            <objects>
+                <viewController title="Base" id="RZV-sZ-vl5" customClass="ThirdViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="PgW-zz-MNS" customClass="DrawBaseView">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.7019608021" green="0.7019608021" blue="0.7019608021" alpha="1" colorSpace="calibratedRGB"/>
                         <viewLayoutGuide key="safeArea" id="MEo-fT-PQa"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5fz-hH-yKa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1266" y="-785"/>
+        </scene>
+        <!--Trangle-->
+        <scene sceneID="GXR-bh-0fO">
+            <objects>
+                <viewController title="Trangle" id="i1w-ts-uL2" customClass="TrangleViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dIz-Q5-hSy" customClass="DrawBaseView">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="0EJ-nu-39C"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Emy-ye-lJL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1956" y="-528"/>
         </scene>
         <!--First View Controller-->
         <scene sceneID="dAA-Fk-WHo">
@@ -117,6 +162,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FxP-B2-88e" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="206" y="844"/>
+        </scene>
+        <!--Graph View Controller-->
+        <scene sceneID="t4b-qu-LuV">
+            <objects>
+                <viewController id="IXx-yK-8mV" customClass="GraphViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vin-3q-zwh" customClass="DrawGraphView">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="ad1-yN-UDR"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qam-Su-Fsq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-556" y="-644"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XZb-Bp-axl">
